@@ -21,7 +21,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 5px;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 .input_wrap >p {
     width: 100%;
