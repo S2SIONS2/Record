@@ -5,8 +5,8 @@
 
     margin: auto;
 
-    background-color: #eee;
-    padding: 2rem;
+    /* background-color: #eee; */
+    padding: 4rem 2rem;
     box-sizing: border-box;
     border-radius: 10px;
 }
@@ -14,4 +14,49 @@
     width: 100%;
     text-align: center;
     font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+.input_wrap{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 1rem;
+}
+.input_wrap >p {
+    width: 100%;
+}
+.input_wrap >.annotation {
+    font-size: 13px;
+    color: #3b3b3b;
+}
+.input_wrap >input {
+    flex-grow: 1;
+    height: 30px;
+    box-sizing: border-box;
+    padding-left: 5px;
+}
+.input_wrap >button {
+    padding: 0 5px;
+    height: 30px;
+}
+.signupBtn {
+    width: 100%;
+    padding: 8px 5px;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+
+    border: none;
+    background-color: #d6f3ff;
+}
+.kakaoBtn {
+    width: 100%;
+    padding: 8px 5px;
+    border-radius: 5px;
+    font-size: 1rem;
+
+    background-color: #FEE500;
+    border: none;
 }

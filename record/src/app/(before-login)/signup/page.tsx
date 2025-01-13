@@ -35,7 +35,7 @@ export default function Page() {
         const params = {
             email : email,
             password: pw,
-            data: {'full_name': name},
+            data: {'name': name},
         }
         await supabase.auth.signUp(params)
     }
@@ -43,29 +43,31 @@ export default function Page() {
     return (
         <div className={style.wrap}>
             <h3 className={style.title}>Record</h3>
-            <div>
+            <div className={style.input_wrap}>
                 <p>아이디</p>
+                <p className={style.annotation}>아이디는 id@email.com 형식으로 적어주세요.</p>
                 <input type="text" value={email} onChange={handleEmail}/>
             </div>
-            <div>
+            <div className={style.input_wrap}>
                 <p>비밀번호</p>
+                <p className={style.annotation}>비밀번호는 6자리 이상으로 적어주세요.</p>
                 <input type="password" value={pw} onChange={handlePw}/>
             </div>
-            <div>
+            <div className={style.input_wrap}>
                 <p>비밀번호 확인</p>
                 <input type="password" value={checkPw} onChange={handleCheckPw}/>
             </div>
-            <div>
+            <div className={style.input_wrap}>
                 <p>이름</p>
                 <input type="text" value={name} onChange={handleName}/>
             </div>
-            <div>
+            <div className={style.input_wrap}>
                 <p>본인 확인 이메일</p>
                 <input type="text" value={checkEmail} onChange={handleCheckEmail}/>
                 <button type='button'>인증하기</button>
             </div>
-            <button type="button" onClick={signupBtn}>가입하기</button>
-            <button type="button">카카오톡으로 가입하기</button>
+            <button type="button" onClick={signupBtn} className={style.signupBtn}>가입하기</button>
+            <button type="button" className={style.kakaoBtn}>카카오톡으로 가입하기</button>
         </div>
     )
 }
