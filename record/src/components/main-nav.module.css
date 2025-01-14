@@ -22,3 +22,9 @@
     align-items: center;
     gap: 1rem;
 }
+.logoutBtn {
+    background-color: transparent;
+    border: none;
+    font-size: 15px;
+    color: #1a1a1a;
+}
