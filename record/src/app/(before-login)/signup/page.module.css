@@ -60,3 +60,8 @@
     background-color: #FEE500;
     border: none;
 }
+
+/* 에러 메세지 색 */
+.red {
+    color: red !important;
+}
