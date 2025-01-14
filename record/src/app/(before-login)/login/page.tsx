@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import style from './page.module.css';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
     const [email, setEmail] = useState('');
@@ -15,8 +16,9 @@ export default function Page() {
         setPw(e.target.value);
     }
 
+    const router = useRouter()
     const signInBtn = () => {
-
+        router.push('/main');
     }
     
     return (

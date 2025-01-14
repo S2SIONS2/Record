@@ -1,0 +1,24 @@
+.nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    box-sizing: border-box;
+    padding: 0 10px;
+
+    width: 100%;
+    height: 52px;
+
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 4px -1px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navDiv{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
