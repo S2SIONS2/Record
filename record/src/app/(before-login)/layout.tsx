@@ -1,5 +1,6 @@
 import LoginNav from "@/components/login-nav";
 import { Suspense } from "react";
+import style from './page.module.css';
 
 export default function Page({children}: Readonly<{children: React.ReactNode}>) {
     return (
@@ -7,7 +8,9 @@ export default function Page({children}: Readonly<{children: React.ReactNode}>) 
             <Suspense fallback={<div>Loading...</div>}>
                 <LoginNav />
             </Suspense>
-            {children}
+            <div className={style.container}>
+                {children}
+            </div>
         </div>
     )
 }
