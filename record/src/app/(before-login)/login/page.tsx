@@ -4,6 +4,7 @@ import { useState } from 'react';
 import style from './page.module.css';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import supabase from '@/utils/supabase/client';
 
 export default function Page() {
     const [email, setEmail] = useState('');
@@ -17,8 +18,22 @@ export default function Page() {
     }
 
     const router = useRouter()
-    const signInBtn = () => {
-        router.push('/main');
+    const signInBtn = async () => {
+        try{
+            const {data, error} = await supabase.auth.signInWithPassword({
+                email: email,
+                password: pw
+            })
+
+            if(!error){
+                console.log(data);
+                return router.push('/main');
+            }else {
+                alert(`로그인에 실패하였습니다. ${error.message}`);
+            }
+        }catch(error){
+            console.error(error)
+        }
     }
     
     return (

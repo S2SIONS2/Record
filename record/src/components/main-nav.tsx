@@ -3,11 +3,22 @@
 import Link from "next/link";
 import style from './main-nav.module.css';
 import { useRouter } from "next/navigation";
+import supabase from "@/utils/supabase/client";
 
 export default function MainNav() {
     const router = useRouter();
-    const logout = () => {
-        router.push('/login');
+    const logout = async () => {
+        try{
+            const { error } = await supabase.auth.signOut();
+            if(!error){
+                return router.push('/login');
+            }else {
+                alert('로그아웃에 실패하였습니다.');
+            }
+        }catch(error){
+            console.error(error)
+        }
+        
     }
     return (
         <nav className={style.nav}>
