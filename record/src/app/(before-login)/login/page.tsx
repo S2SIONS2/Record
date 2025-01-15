@@ -17,7 +17,7 @@ export default function Page() {
         setPw(e.target.value);
     }
 
-    const router = useRouter()
+    const router = useRouter();
     const signInBtn = async () => {
         try{
             const {data, error} = await supabase.auth.signInWithPassword({
@@ -32,7 +32,14 @@ export default function Page() {
                 alert(`로그인에 실패하였습니다. ${error.message}`);
             }
         }catch(error){
-            console.error(error)
+            console.error(error);
+        }
+    }
+
+    // 엔터 키 누르면 로그인 되게
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if(e.key === 'Enter') {
+            signInBtn();
         }
     }
     
@@ -41,11 +48,11 @@ export default function Page() {
             <h3 className={style.title}>Record</h3>
             <div className={style.input_wrap}>
                 <p>아이디</p>
-                <input type="text" value={email} onChange={handleEmail}/>
+                <input type="text" value={email} onChange={handleEmail} onKeyDown={handleKeyDown}/>
             </div>
             <div className={style.input_wrap}>
                 <p>비밀번호</p>
-                <input type="password" value={pw} onChange={handlePw}/>
+                <input type="password" value={pw} onChange={handlePw} onKeyDown={handleKeyDown}/>
             </div>
             
             <button type="button" onClick={signInBtn} className={style.signInBtn}>로그인</button>
