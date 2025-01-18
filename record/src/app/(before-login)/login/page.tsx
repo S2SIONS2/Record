@@ -4,9 +4,11 @@ import { useState } from 'react';
 import style from './page.module.css';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import supabase from '@/utils/supabase/client';
+import { createClient } from '@/utils/supabase/client';
 
 export default function Page() {
+    const supabase = createClient()
+
     const [email, setEmail] = useState('');
     const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);

@@ -3,9 +3,10 @@
 import Link from "next/link";
 import style from './main-nav.module.css';
 import { useRouter } from "next/navigation";
-import supabase from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 export default function MainNav() {
+    const supabase = createClient()
     const router = useRouter();
     const logout = async () => {
         try{
