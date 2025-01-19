@@ -58,7 +58,7 @@ export default function Page() {
             </div>
             
             <button type="button" onClick={signInBtn} className={style.signInBtn}>로그인</button>
-            <Link href={'/signup'} className={style.link}>회원가입하기</Link>
+            <Link href={'/signup'} className={style.link}>회원이 아니신가요? 회원가입하기</Link>
         </div>
     )
 }

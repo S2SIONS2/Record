@@ -39,9 +39,9 @@ export default function Page() {
                 } else {
                     setBoards([]);
                 }
-            } catch (err) {
-                setError(err.message);
-                console.error('Unexpected Error:', err);
+            } catch (error) {
+                setError(error.message);
+                console.error('Unexpected Error:', error);
             } finally {
                 setLoading(false);
             }
