@@ -9,12 +9,12 @@ import { createClient } from '@/utils/supabase/client';
 export default function Page() {
     const supabase = createClient()
 
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState('ex@ex.com');
     const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
     }
 
-    const [pw, setPw] = useState('');
+    const [pw, setPw] = useState('123456');
     const handlePw = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPw(e.target.value);
     }
@@ -50,11 +50,11 @@ export default function Page() {
             <h3 className={style.title}>Record</h3>
             <div className={style.input_wrap}>
                 <p>아이디</p>
-                <input type="text" value={email} onChange={handleEmail} onKeyDown={handleKeyDown}/>
+                <input type="text" value={email} onChange={handleEmail} onKeyDown={handleKeyDown} placeholder='ex@ex.com'/>
             </div>
             <div className={style.input_wrap}>
                 <p>비밀번호</p>
-                <input type="password" value={pw} onChange={handlePw} onKeyDown={handleKeyDown}/>
+                <input type="password" value={pw} onChange={handlePw} onKeyDown={handleKeyDown} placeholder='123456'/>
             </div>
             
             <button type="button" onClick={signInBtn} className={style.signInBtn}>로그인</button>

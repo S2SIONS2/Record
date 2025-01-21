@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import style from './page.module.css';
-import supabase from '@/utils/supabase/client';
+import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 
 export default function Page() {
+    const supabase = createClient();
+
     const [email, setEmail] = useState('');
     const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
