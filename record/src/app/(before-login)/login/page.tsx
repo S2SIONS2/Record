@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import style from './page.module.css';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -45,6 +45,29 @@ export default function Page() {
         }
     }
     
+    // 카카오톡 회원가입
+    const kakaoLogin = async () => {
+        try {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'kakao',
+                options: {
+                    redirectTo: process.env.NEXT_PUBLIC_SUPABASE_URL
+                      ? `https://${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/callback`
+                      : "http://localhost:3000/auth/callback",
+                  },
+            })
+            
+            if(!error){
+                router.push('/main');
+            }else {
+                alert(`로그인에 실패하였습니다. ${error.message}`);
+                router.push('/login');
+            }
+        }catch(error) {
+            console.error(error);
+        }
+    }
+
     return (
         <div className={style.wrap}>
             <h3 className={style.title}>Record</h3>
@@ -58,6 +81,7 @@ export default function Page() {
             </div>
             
             <button type="button" onClick={signInBtn} className={style.signInBtn}>로그인</button>
+            <button type="button" onClick={kakaoLogin} className={style.kakaoBtn}>카카오톡으로 로그인하기</button>
             <Link href={'/signup'} className={style.link}>회원이 아니신가요? 회원가입하기</Link>
         </div>
     )

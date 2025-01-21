@@ -18,8 +18,9 @@ export default function Page() {
     const [error, setError] = useState<string | null>(null);
 
     const supabase = createClient();
-
+    
     useEffect(() => {
+
         const fetchBoards = async () => {
             setLoading(true);
             setError(null);

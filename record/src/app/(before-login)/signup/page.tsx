@@ -28,10 +28,10 @@ export default function Page() {
         setName(e.target.value);
     }
 
-    const[checkEmail, setCheckEmail] = useState('');
-    const handleCheckEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCheckEmail(e.target.value);
-    }
+    // const[checkEmail, setCheckEmail] = useState('');
+    // const handleCheckEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setCheckEmail(e.target.value);
+    // }
 
     // 비밀번호 확인
     const [pwStatus, setPwStatus] = useState('');
@@ -81,7 +81,7 @@ export default function Page() {
                 setErrorStatus(400)
             }else if(!error){ // 성공적으로 signUp 후 로그인 페이지로 이동
                 alert('회원가입이 되었습니다.');
-                router.push('/login');
+                // router.push('/login');
             }
         }catch(error) {
             console.error(error)
@@ -124,13 +124,13 @@ export default function Page() {
                 <p><span className={style.red}>*</span> 이름</p>
                 <input type="text" ref={pwInputRef} value={name} onChange={handleName}/>
             </div>
-            <div className={style.input_wrap}>
+            {/* <div className={style.input_wrap}>
                 <p>본인 확인 이메일</p>
                 <input type="text" value={checkEmail} onChange={handleCheckEmail}/>
                 <button type='button'>인증하기</button>
-            </div>
+            </div> */}
             <button type="button" onClick={signupBtn} className={style.signupBtn}>가입하기</button>
-            <button type="button" className={style.kakaoBtn}>카카오톡으로 가입하기</button>
+            {/* <button type="button" onClick={kakaoSignUp} className={style.kakaoBtn}>카카오톡으로 가입하기</button> */}
         </div>
     )
 }
