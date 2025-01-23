@@ -25,7 +25,6 @@ export default function Page() {
             setError(null);
     
             try {
-
                 const response = await fetch('/api/boards');
                 if (!response.ok) {
                     throw new Error('Failed to fetch boards');
@@ -40,7 +39,6 @@ export default function Page() {
                     setBoards([]);
                 }
             } catch (error) {
-                setError(error.message);
                 console.error('Unexpected Error:', error);
             } finally {
                 setLoading(false);

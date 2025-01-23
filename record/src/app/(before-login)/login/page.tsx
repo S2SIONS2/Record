@@ -9,7 +9,7 @@ import { createClient } from '@/utils/supabase/client';
 export default function Page() {
     const supabase = createClient()
 
-    const [email, setEmail] = useState('ex@ex.com');
+    const [email, setEmail] = useState('chasio100@naver.com');
     const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
     }
@@ -81,7 +81,7 @@ export default function Page() {
             <h3 className={style.title}>Record</h3>
             <div className={style.input_wrap}>
                 <p>아이디</p>
-                <input type="text" value={email} onChange={handleEmail} onKeyDown={handleKeyDown} placeholder='ex@ex.com'/>
+                <input type="text" value={email} onChange={handleEmail} onKeyDown={handleKeyDown} placeholder='id@email.com'/>
             </div>
             <div className={style.input_wrap}>
                 <p>비밀번호</p>
