@@ -6,8 +6,9 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
   // if "next" is in param, use it as the redirect URL
-  const next = searchParams.get('next') ?? '/'
+  const next = searchParams.get('next') ?? '/main'
 
+  console.log("code is", code)
   // 코드가 200 이면 조회성공 그러면 이것을 내 디비에 있나 조회 
   if (code) {
     const supabase = await createClient()
@@ -15,6 +16,7 @@ export async function GET(request: Request) {
     if (!error) {
       const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === 'development'
+      console.log("ok and", forwardedHost, isLocalEnv, origin, next)
       if (isLocalEnv) {
         // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
         return NextResponse.redirect(`${origin}${next}`)
@@ -23,6 +25,9 @@ export async function GET(request: Request) {
       } else {
         return NextResponse.redirect(`${origin}${next}`)
       }
+    }
+    if(error){
+      console.error(error)
     }
   }
 

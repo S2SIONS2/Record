@@ -11,7 +11,6 @@ interface Board {
     created_at: string; // 생성 날짜 필드
 }
 
-
 export default function Page() {
     const [boards, setBoards] = useState<Board[]>([]); // Board 배열로 타입 지정
     const [loading, setLoading] = useState<boolean>(true);
@@ -51,6 +50,18 @@ export default function Page() {
         fetchBoards();
     }, []);    
     
+    // async function logUserInfo() {
+    //     const { data: user, error } = await supabase.auth.getUser();
+    //     if (error) {
+    //       console.error('Error fetching user:', error);
+    //     } else {
+    //       console.log('User info:', user);
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     logUserInfo();
+    // }, [])
 
     if (loading) {
         return <div>Loading...</div>;

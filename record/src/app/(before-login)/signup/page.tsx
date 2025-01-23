@@ -81,7 +81,7 @@ export default function Page() {
                 setErrorStatus(400)
             }else if(!error){ // 성공적으로 signUp 후 로그인 페이지로 이동
                 alert('회원가입이 되었습니다.');
-                // router.push('/login');
+                router.push('/login');
             }
         }catch(error) {
             console.error(error)

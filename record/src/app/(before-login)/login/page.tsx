@@ -45,28 +45,36 @@ export default function Page() {
         }
     }
     
-    // 카카오톡 회원가입
+    // 카카오톡 회원가입 및 로그인
     const kakaoLogin = async () => {
-        try {
+        console.log(process.env.NEXT_PUBLIC_SUPABASE_URL);
+        try {          
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'kakao',
                 options: {
                     redirectTo: process.env.NEXT_PUBLIC_SUPABASE_URL
                       ? `https://${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/callback`
-                      : "http://localhost:3000/auth/callback",
+                      : "http://localhost:3000/api/auth/callback",
+                    // redirectTo: "http://localhost:3000/api/auth/callback"
                   },
             })
-            
-            if(!error){
-                router.push('/main');
-            }else {
-                alert(`로그인에 실패하였습니다. ${error.message}`);
-                router.push('/login');
+            if(error) {
+                console.error(error);
             }
+
         }catch(error) {
             console.error(error);
         }
     }
+
+    useEffect(() => {
+        supabase.auth.onAuthStateChange((event, session) => {
+          if (event === "SIGNED_IN" && session) {
+            // 로그인 성공 시 리다이렉트
+            router.push("/main");
+          }
+        });
+      }, [router]);
 
     return (
         <div className={style.wrap}>
