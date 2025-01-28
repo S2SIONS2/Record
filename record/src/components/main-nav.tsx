@@ -15,8 +15,8 @@ export default function MainNav() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await supabase.auth.getUser();
-                setUser((response.data.user?.user_metadata.name))
+                const response = (await supabase.auth.getSession());
+                setUser((response.data.session?.user.user_metadata.name))
             }catch(error){
                 console.error('Unexpected Error:', error);
             }

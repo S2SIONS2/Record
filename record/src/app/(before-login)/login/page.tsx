@@ -28,7 +28,6 @@ export default function Page() {
             })
 
             if(!error){
-                console.log(data);
                 return router.push('/main');
             }else {
                 alert(`로그인에 실패하였습니다. ${error.message}`);

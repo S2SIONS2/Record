@@ -4,15 +4,16 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 
 // board 테이블 데이터 타입 정의
-interface Board {
+interface placelist {
     id: number;
-    title: string;
-    contents: string; // 게시판 내용 필드
-    created_at: string; // 생성 날짜 필드
+    latitude: number;
+    longitude: number;
+    name: string;
+    score: number
 }
 
 export default function Page() {
-    const [boards, setBoards] = useState<Board[]>([]); // Board 배열로 타입 지정
+    const [placelist, setPlaceList] = useState<placelist[]>([]); // Board 배열로 타입 지정
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -23,9 +24,11 @@ export default function Page() {
         const fetchBoards = async () => {
             setLoading(true);
             setError(null);
-    
+            
+            const session = await supabase.auth.getSession()
+
             try {
-                const response = await fetch('/api/boards');
+                const response = await fetch(`/api/placelist/${session.data.session?.user.id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch boards');
                 }
@@ -34,9 +37,9 @@ export default function Page() {
                 console.log('Fetched data from API route:', data);
     
                 if (data.length > 0) {
-                    setBoards(data);
+                    setPlaceList(data);
                 } else {
-                    setBoards([]);
+                    setPlaceList([]);
                 }
             } catch (error) {
                 console.error('Unexpected Error:', error);
@@ -47,19 +50,6 @@ export default function Page() {
     
         fetchBoards();
     }, []);    
-    
-    // async function logUserInfo() {
-    //     const { data: user, error } = await supabase.auth.getUser();
-    //     if (error) {
-    //       console.error('Error fetching user:', error);
-    //     } else {
-    //       console.log('User info:', user);
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     logUserInfo();
-    // }, [])
 
     if (loading) {
         return <div>Loading...</div>;
@@ -73,11 +63,10 @@ export default function Page() {
         <div>
             <h1>Boards</h1>
             <ul>
-                {boards.map((board) => (
-                    <li key={board.id}>
-                        <h2>{board.title}</h2>
-                        <p>{board.contents}</p>
-                        <small>{new Date(board.created_at).toLocaleString()}</small>
+                {placelist.map((place) => (
+                    <li key={place.id}>
+                        <h2>{place.name}</h2>
+                        <p>{place.score} / 5</p>
                     </li>
                 ))}
             </ul>
