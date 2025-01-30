@@ -3,8 +3,33 @@
 import Script from "next/script";
 import { useEffect, useState } from "react";
 
+interface Location {
+    lat: number;
+    lng: number;
+}
+
 export default function MyMap() {
+    // script가 읽히기 전에 페이지 로드 됨을 방지
     const [isLoaded, setIsLoaded] = useState(false);
+
+    // 현재 위치 알아내기
+    const [currentLocation, setCurrentLocation] = useState<Location>({ lat: 37.5665, lng: 126.978 });
+    const getLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                setCurrentLocation({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                });
+            });
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+        }
+    }
+
+    useEffect(() => {
+        getLocation()
+    }, []);
 
     useEffect(() => {
         const initMap = () => {
@@ -14,10 +39,10 @@ export default function MyMap() {
             }
 
             const mapOptions = {
-                center: new naver.maps.LatLng(37.3595704, 127.105399),
+                center: new naver.maps.LatLng(currentLocation),
                 zoom: 15
             };
-            new naver.maps.Map('map', mapOptions);
+            new naver.maps.Map('map', mapOptions);   
         };
 
         if (!isLoaded) return;

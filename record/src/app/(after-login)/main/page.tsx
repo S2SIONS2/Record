@@ -35,7 +35,6 @@ export default function Page() {
                 }
     
                 const data = await response.json();
-                console.log('Fetched data from API route:', data);
     
                 if (data.length > 0) {
                     setPlaceList(data);
