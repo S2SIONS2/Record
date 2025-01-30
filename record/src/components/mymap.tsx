@@ -3,6 +3,7 @@
 import Script from "next/script";
 import { useEffect, useState } from "react";
 
+// 현재 위치 타입 정의
 interface Location {
     lat: number;
     lng: number;
@@ -40,7 +41,17 @@ export default function MyMap() {
 
             const mapOptions = {
                 center: new naver.maps.LatLng(currentLocation),
-                zoom: 15
+                zoom: 15,
+                minZoom: 6,
+                // 지도 확대 / 축소 컨트롤러
+                scaleControl: false,
+                logoControl: false,
+                mapDataControl: false,
+                zoomControl: true,
+                zoomControlOptions: {
+                    style: naver.maps.ZoomControlStyle.SMALL,
+                    position: naver.maps.Position.TOP_RIGHT
+                }
             };
             new naver.maps.Map('map', mapOptions);   
         };

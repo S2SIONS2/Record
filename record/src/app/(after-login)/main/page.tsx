@@ -1,8 +1,10 @@
 'use client'
 
+import style from './page.module.css';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import MyMap from '@/components/mymap';
+import RecordListModal from '@/components/record-list-modal';
 
 // board 테이블 데이터 타입 정의
 interface placelist {
@@ -20,8 +22,8 @@ export default function Page() {
 
     const supabase = createClient();
     
+    // 리스트 
     useEffect(() => {
-
         const fetchBoards = async () => {
             setLoading(true);
             setError(null);
@@ -49,7 +51,14 @@ export default function Page() {
         };
     
         fetchBoards();
-    }, []);    
+    }, []);
+
+    // 모달 열기
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+    const openModal = () => {
+        setModalOpen(true);
+    }
 
     if (loading) {
         return <div>Loading...</div>;
@@ -61,15 +70,22 @@ export default function Page() {
 
     return (
         <div>
-            <MyMap />
-            <ul>
-                {placelist.map((place) => (
-                    <li key={place.id}>
-                        <h2>{place.name}</h2>
-                        <p>{place.score} / 5</p>
-                    </li>
-                ))}
-            </ul>
+            <div className={style.leftArea}>
+                <MyMap />
+            </div>
+            <div className={style.rightArea}>
+
+                <button type='button' onClick={openModal}> + </button>
+                {modalOpen && <RecordListModal />}
+                <ul>
+                    {placelist.map((place) => (
+                        <li key={place.id}>
+                            <h2>{place.name}</h2>
+                            <p>{place.score} / 5</p>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 }
