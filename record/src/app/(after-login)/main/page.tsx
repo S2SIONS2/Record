@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
+import MyMap from '@/components/mymap';
 
 // board 테이블 데이터 타입 정의
 interface placelist {
@@ -61,7 +62,7 @@ export default function Page() {
 
     return (
         <div>
-            <h1>Boards</h1>
+            <MyMap />
             <ul>
                 {placelist.map((place) => (
                     <li key={place.id}>

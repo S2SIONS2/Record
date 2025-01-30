@@ -22,7 +22,7 @@ export default function Page() {
     const router = useRouter();
     const signInBtn = async () => {
         try{
-            const {data, error} = await supabase.auth.signInWithPassword({
+            const {error} = await supabase.auth.signInWithPassword({
                 email: email,
                 password: pw
             })
