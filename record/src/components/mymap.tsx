@@ -12,6 +12,12 @@ interface Location {
 export default function MyMap() {
     // script가 읽히기 전에 페이지 로드 됨을 방지
     const [isLoaded, setIsLoaded] = useState(false);
+    // 스크립트 재 로드용 버전 생성 함수
+    // const [randomNum, setRandomNum] = useState(0);
+    // const makeRandomNum = () => {
+    //     const num = Math.random();
+    //     setRandomNum(num);
+    // }
 
     // 현재 위치 알아내기
     const [currentLocation, setCurrentLocation] = useState<Location>({ lat: 37.5665, lng: 126.978 });
@@ -32,34 +38,36 @@ export default function MyMap() {
         getLocation()
     }, []);
 
-    useEffect(() => {
-        const initMap = () => {
-            if (typeof naver === 'undefined' || !naver.maps) {
-                console.error("Naver Maps API is not loaded yet.");
-                return;
+    // 네이버 지도 초기 설정
+    const initMap = () => {
+        if (typeof naver === 'undefined' || !naver.maps) {
+            console.error("Naver Maps API is not loaded yet.");
+            return;
+        }
+
+        const mapOptions = {
+            center: new naver.maps.LatLng(currentLocation),
+            zoom: 15,
+            minZoom: 6,
+            // 지도 확대 / 축소 컨트롤러
+            scaleControl: false,
+            logoControl: false,
+            mapDataControl: false,
+            zoomControl: true,
+            zoomControlOptions: {
+                style: naver.maps.ZoomControlStyle.SMALL,
+                position: naver.maps.Position.TOP_RIGHT
             }
-
-            const mapOptions = {
-                center: new naver.maps.LatLng(currentLocation),
-                zoom: 15,
-                minZoom: 6,
-                // 지도 확대 / 축소 컨트롤러
-                scaleControl: false,
-                logoControl: false,
-                mapDataControl: false,
-                zoomControl: true,
-                zoomControlOptions: {
-                    style: naver.maps.ZoomControlStyle.SMALL,
-                    position: naver.maps.Position.TOP_RIGHT
-                }
-            };
-            new naver.maps.Map('map', mapOptions);   
         };
+        
+        new naver.maps.Map('map', mapOptions);
+    };
 
+    useEffect(() => {
+        // if ()
         if (!isLoaded) return;
-
         initMap();
-    }, [isLoaded]);
+    }, [currentLocation, isLoaded]);
 
     return (
         <>
@@ -67,9 +75,9 @@ export default function MyMap() {
                 strategy="afterInteractive"
                 type="text/javascript"
                 src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}`}
-                onLoad={() => setIsLoaded(true)}
+                onReady={() => setIsLoaded(true)}
             />
-            <h1>MyMap</h1>
+
             <div id="map" style={{width: '100%', height: '400px'}}></div>
         </>
     );
