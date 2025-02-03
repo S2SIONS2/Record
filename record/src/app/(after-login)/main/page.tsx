@@ -69,7 +69,7 @@ export default function Page() {
     }
 
     return (
-        <div>
+        <div className={style.mainWrap}>
             <div className={style.leftArea}>
                 <MyMap />
             </div>

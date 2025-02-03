@@ -3,29 +3,83 @@ import { NextResponse } from 'next/server';
 
 const supabase = createClient();
 
+// 타입 정의
+// interface plactList {
+//   user_id : string,
+//   name: string,
+//   score: number,
+//   address: string,
+//   mapx: number,
+//   mapy: number,
+// }
+
+
+// get 
 export async function GET(
-    req: Request,
-    { params }: { params: { user_id: string } }
+  req: Request,
+  context: { params: Promise<{ user_id: string }> }
 ): Promise<NextResponse> {
-    const { user_id } = params; // 동적 경로 변수 가져오기
-    if (!user_id) {
-        return NextResponse.json({ error: 'Missing user ID' }, { status: 400 });
+  
+  const { user_id } = await context.params;
+
+  if (!user_id) {
+    return NextResponse.json({ error: 'Missing user ID' }, { status: 400 });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('placelist')
+      .select('id, name, score, mapx, mapy')
+      .eq('user_id', user_id);
+
+    if (error) {
+      console.error('Supabase Error:', error.message);
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    try {
-        const { data, error } = await supabase
-            .from('placelist')
-            .select('id, name, score, latitude, longitude')
-            .eq('user_id', user_id); 
-
-        if (error) {
-            console.error('Supabase Error:', error.message);
-            return NextResponse.json({ error: error.message }, { status: 500 });
-        }
-
-        return NextResponse.json(data, { status: 200 });
-    } catch (err) {
-        console.error('Unexpected Error:', err);
-        return NextResponse.json({ error: 'Unexpected error occurred' }, { status: 500 });
-    }
+    return NextResponse.json(data, { status: 200 });
+  } catch (err) {
+    console.error('Unexpected Error:', err);
+    return NextResponse.json({ error: 'Unexpected error occurred' }, { status: 500 });
+  }
 }
+
+// post
+
+// put
+export async function PUT(
+  req: Request,
+  context: {params: Promise<{user_id: string}>}
+) {
+
+  const { user_id } = await context.params;
+  if (!user_id) {
+    return NextResponse.json({ error: 'Missing user ID' }, { status: 400 });
+  }
+  try {
+    // 요청 본문에서 데이터 가져오기
+    const { name, score, address, mapx, mapy } = await req.json();
+    console.log(name);
+    const { data, error } = await supabase
+    .from('placelist')
+    .insert([
+      {
+        name: name,
+        score: score,
+        address: address,
+        mapx: mapx,
+        mapy: mapy,
+        user_id: user_id
+      }
+    ])
+
+    if (error ){
+      console.error('리스트 추가 중 오류 발생', error)
+    }
+
+    return NextResponse.json(data, { status: 200 });
+  }catch(err){
+    console.error(err)
+  }
+}
+// delete

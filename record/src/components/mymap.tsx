@@ -12,12 +12,6 @@ interface Location {
 export default function MyMap() {
     // script가 읽히기 전에 페이지 로드 됨을 방지
     const [isLoaded, setIsLoaded] = useState(false);
-    // 스크립트 재 로드용 버전 생성 함수
-    // const [randomNum, setRandomNum] = useState(0);
-    // const makeRandomNum = () => {
-    //     const num = Math.random();
-    //     setRandomNum(num);
-    // }
 
     // 현재 위치 알아내기
     const [currentLocation, setCurrentLocation] = useState<Location>({ lat: 37.5665, lng: 126.978 });
@@ -64,7 +58,6 @@ export default function MyMap() {
     };
 
     useEffect(() => {
-        // if ()
         if (!isLoaded) return;
         initMap();
     }, [currentLocation, isLoaded]);
@@ -78,7 +71,7 @@ export default function MyMap() {
                 onReady={() => setIsLoaded(true)}
             />
 
-            <div id="map" style={{width: '100%', height: '400px'}}></div>
+            <div id="map" style={{width: '100%', height: 'calc(100vh - 52px)'}}></div>
         </>
     );
 }
