@@ -5,8 +5,9 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import MyMap from '@/components/mymap';
 import RecordListModal from '@/components/record-list-modal';
+import useSearchStore from '@/store/useSearchStore';
 
-// board 테이블 데이터 타입 정의
+// placelist 테이블 데이터 타입 정의
 interface placelist {
     id: number;
     latitude: number;
@@ -14,15 +15,25 @@ interface placelist {
     name: string;
     score: number
 }
+interface Place {
+    name: string;
+    score: number;
+    roadAddress: string;
+    mapx: number;
+    mapy: number;
+}
 
 export default function Page() {
-    const [placelist, setPlaceList] = useState<placelist[]>([]); // Board 배열로 타입 지정
+    const [placelist, setPlaceList] = useState<placelist[]>([]); // placelist 배열로 타입 지정
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     const supabase = createClient();
+
+    // zustand 스토어에서 상태 가져오기
+    const { selectedPlace } = useSearchStore() as { selectedPlace: Place | null };
     
-    // 리스트 
+    // 리스트 호출
     useEffect(() => {
         const fetchBoards = async () => {
             setLoading(true);
@@ -49,12 +60,12 @@ export default function Page() {
                 setLoading(false);
             }
         };
-    
+        
         fetchBoards();
     }, []);
 
     // 모달 열기
-    const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [modalOpen, setModalOpen] = useState<boolean>(true);
 
     const openModal = () => {
         setModalOpen(true);
@@ -71,7 +82,7 @@ export default function Page() {
     return (
         <div className={style.mainWrap}>
             <div className={style.leftArea}>
-                <MyMap />
+                <MyMap place={selectedPlace}/>
             </div>
             <div className={style.rightArea}>
 

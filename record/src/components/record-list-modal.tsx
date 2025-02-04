@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
+import useSearchStore from "@/store/useSearchStore";
 
 export default function RecordListModal() {
     // search input
@@ -29,6 +30,9 @@ export default function RecordListModal() {
     const [mapx, setMapx] = useState<number>();
     const [mapy, setMapy] = useState<number>();
 
+    // zustand
+    const { setSelectedPlace } = useSearchStore();
+
     // 가게 검색 시
     const onSubmit = async () => {
         const response = await fetch(
@@ -43,18 +47,22 @@ export default function RecordListModal() {
           })
           .then(data => {
             // 데이터 추가
-            setPlaceAddress(data.items[0].address)
+            setPlaceAddress(data.items[0].roadAddress)
             // 정규식 활용
             const noTags = data.items[0].title.replace(/<[^>]*>/g, '')
             setPlaceName(noTags)
             setMapx(parseFloat(data.items[0].mapx))
             setMapy(parseFloat(data.items[0].mapy))
+
+            // zustand 전역 전달
+            setSelectedPlace(data.items[0])
+            
           })
           .catch(error => {
             console.error('API 호출 중 오류가 발생했습니다: ', error);
           });
 
-          console.log(response)
+          return response
     }
     // 인풋에서 엔터 입력으로 검색
     const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -79,9 +87,9 @@ export default function RecordListModal() {
                 user_id: user_id
             }
 
-            // put 요청
+            // post 요청
             const response = await fetch(`/api/placelist/${session.data.session?.user.id}`, {
-                method: 'PUT',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -92,8 +100,7 @@ export default function RecordListModal() {
                 throw new Error('가게 저장에 실패했습니다.');
             }
 
-            const result = await response.json();
-            console.log('Successfully added:', result);
+            await response.json();
 
         }catch(err) {
             console.error(err)

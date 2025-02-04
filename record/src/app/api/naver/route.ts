@@ -1,6 +1,7 @@
 // app/api/naver-search/route.ts
 import { NextResponse } from "next/server";
 
+// 네이버 검색 api
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get("query");

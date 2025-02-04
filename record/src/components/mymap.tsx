@@ -9,14 +9,40 @@ interface Location {
     lng: number;
 }
 
-export default function MyMap() {
+interface Place {
+    name: string;
+    score: number;
+    roadAddress: string;
+    mapx: number;
+    mapy: number;
+}
+
+export default function MyMap({ place }: { place: Place | null}) {
     // script가 읽히기 전에 페이지 로드 됨을 방지
     const [isLoaded, setIsLoaded] = useState(false);
 
     // 현재 위치 알아내기
     const [currentLocation, setCurrentLocation] = useState<Location>({ lat: 37.5665, lng: 126.978 });
-    const getLocation = () => {
-        if (navigator.geolocation) {
+
+    const getLocation = async () => {
+        if(place) {
+            // 네이버 검색 떄 가져온 주소로 위도, 경도 값 변경
+            naver.maps.Service.geocode({
+                query: place.roadAddress
+            }, function(status, response) {
+                if (status !== naver.maps.Service.Status.OK) {
+                    return alert('Something wrong!');
+                }
+
+                const result = response.v2
+                const item = result.addresses[0]
+
+                setCurrentLocation({
+                    lat: Number(item.y), 
+                    lng: Number(item.x)
+                })
+            })
+        } else if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setCurrentLocation({
                     lat: position.coords.latitude,
@@ -30,10 +56,10 @@ export default function MyMap() {
 
     useEffect(() => {
         getLocation()
-    }, []);
+    }, [place]);
 
-    // 네이버 지도 초기 설정
-    const initMap = () => {
+     // 네이버 지도 초기 설정
+     const initMap = () => {
         if (typeof naver === 'undefined' || !naver.maps) {
             console.error("Naver Maps API is not loaded yet.");
             return;
@@ -53,7 +79,7 @@ export default function MyMap() {
                 position: naver.maps.Position.TOP_RIGHT
             }
         };
-        
+
         new naver.maps.Map('map', mapOptions);
     };
 
@@ -67,7 +93,7 @@ export default function MyMap() {
             <Script 
                 strategy="afterInteractive"
                 type="text/javascript"
-                src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}`}
+                src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&submodules=geocoder`}
                 onReady={() => setIsLoaded(true)}
             />
 

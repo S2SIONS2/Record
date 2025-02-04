@@ -45,9 +45,7 @@ export async function GET(
 }
 
 // post
-
-// put
-export async function PUT(
+export async function POST(
   req: Request,
   context: {params: Promise<{user_id: string}>}
 ) {
@@ -57,7 +55,7 @@ export async function PUT(
     return NextResponse.json({ error: 'Missing user ID' }, { status: 400 });
   }
   try {
-    // 요청 본문에서 데이터 가져오기
+    // 리스트 추가 할 데이터 가져오기
     const { name, score, address, mapx, mapy } = await req.json();
     console.log(name);
     const { data, error } = await supabase
@@ -82,4 +80,6 @@ export async function PUT(
     console.error(err)
   }
 }
+
+// put
 // delete
