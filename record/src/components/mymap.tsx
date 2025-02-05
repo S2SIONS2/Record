@@ -3,6 +3,7 @@
 import Script from "next/script";
 import { useEffect, useState } from "react";
 
+
 // 현재 위치 타입 정의
 interface Location {
     lat: number;
@@ -16,8 +17,12 @@ interface Place {
     mapx: number;
     mapy: number;
 }
+interface MyMapProps {
+    selectedPlace: Place | null;
+    placeList: Place[] | null;
+}
 
-export default function MyMap({ place }: { place: Place | null}) {
+export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
     // script가 읽히기 전에 페이지 로드 됨을 방지
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -25,10 +30,10 @@ export default function MyMap({ place }: { place: Place | null}) {
     const [currentLocation, setCurrentLocation] = useState<Location>({ lat: 37.5665, lng: 126.978 });
 
     const getLocation = async () => {
-        if(place) {
+        if(selectedPlace) {
             // 네이버 검색 떄 가져온 주소로 위도, 경도 값 변경
             naver.maps.Service.geocode({
-                query: place.roadAddress
+                query: selectedPlace.roadAddress
             }, function(status, response) {
                 if (status !== naver.maps.Service.Status.OK) {
                     return alert('Something wrong!');
@@ -54,9 +59,17 @@ export default function MyMap({ place }: { place: Place | null}) {
         }
     }
 
+    // 검색 정보 받아올 때 마다 center, 마커 위치 변경
     useEffect(() => {
+        // 지도에 마커 찍기
+        // const getMarker = () => {
+            
+        // }
+        // center 변경
         getLocation()
-    }, [place]);
+    }, [selectedPlace]); 
+
+    
 
      // 네이버 지도 초기 설정
      const initMap = () => {
@@ -86,6 +99,7 @@ export default function MyMap({ place }: { place: Place | null}) {
     useEffect(() => {
         if (!isLoaded) return;
         initMap();
+        console.log(placeList)
     }, [currentLocation, isLoaded]);
 
     return (

@@ -3,17 +3,6 @@ import { NextResponse } from 'next/server';
 
 const supabase = createClient();
 
-// 타입 정의
-// interface plactList {
-//   user_id : string,
-//   name: string,
-//   score: number,
-//   address: string,
-//   mapx: number,
-//   mapy: number,
-// }
-
-
 // get 
 export async function GET(
   req: Request,
@@ -57,7 +46,7 @@ export async function POST(
   try {
     // 리스트 추가 할 데이터 가져오기
     const { name, score, address, mapx, mapy } = await req.json();
-    console.log(name);
+    
     const { data, error } = await supabase
     .from('placelist')
     .insert([
