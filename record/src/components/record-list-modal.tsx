@@ -47,7 +47,7 @@ export default function RecordListModal() {
           })
           .then(data => {
             // 데이터 추가
-            setPlaceAddress(data.items[0].roadAddress)
+            setPlaceAddress(data.items[0].address)
             // 정규식 활용
             const noTags = data.items[0].title.replace(/<[^>]*>/g, '')
             setPlaceName(noTags)

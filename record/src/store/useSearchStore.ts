@@ -3,7 +3,7 @@ import { create } from 'zustand';
 interface Place {
   name: string;
   score: number;
-  address: string;
+  roadaddress: string;
   mapx: number;
   mapy: number;
 }

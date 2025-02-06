@@ -10,17 +10,20 @@ import PlaceList from '@/components/placelist';
 import usePlaceStore from '@/store/usePlaceStore';
 
 interface Place {
+    id: number;
     name: string;
     score: number;
-    roadAddress: string;
+    address: string;
     mapx: number;
     mapy: number;
+    latitude?: number;
+    longitude?: number;
 }
 
 export default function Page() {
     // zustand 스토어에서 상태 가져오기
-    const { selectedPlace } = useSearchStore() as { selectedPlace: Place | null }; // 모달 검색 place
-    const { placeList, fetchPlaces } = usePlaceStore() as {placeList: Place[] | null, fetchPlaces: () => Promise<void>} // 장소 리스트 
+    const { selectedPlace } = useSearchStore() as { selectedPlace: Place | null }; // 모달에서 검색된 place값
+    const { placeList, fetchPlaces, subscribeToPlaces } = usePlaceStore() as {placeList: Place[] | null, fetchPlaces: () => Promise<void>, subscribeToPlaces: () => void} // 장소 리스트 
 
     // 모달 열기
     const [modalOpen, setModalOpen] = useState<boolean>(true);
@@ -29,9 +32,8 @@ export default function Page() {
     }
 
     useEffect(() => {
-        fetchPlaces()
-        console.log(placeList)
-        // console.log(selectedPlace)
+        fetchPlaces() // 전역 placeList 가져오기
+        subscribeToPlaces() // 실시간으로 테이블 변화 감지 후 최신 데이터 가져오기
     }, [])
 
     return (
@@ -39,7 +41,7 @@ export default function Page() {
             <div className={style.leftArea}>
                 <MyMap 
                     selectedPlace={selectedPlace} 
-                    placeList={placeList}
+                    placeList={placeList || []}
                 />
             </div>
             <div className={style.rightArea}>
@@ -47,7 +49,7 @@ export default function Page() {
                 <button type='button' onClick={openModal}> + </button>
                 {modalOpen && <RecordListModal />}
                 <PlaceList 
-                    placeList={placeList}
+                    placeList={placeList || []}
                 />
             </div>
         </div>

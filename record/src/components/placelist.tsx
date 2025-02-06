@@ -1,9 +1,9 @@
 // placelist 테이블 데이터 타입 정의
 interface Place {
     id: number;
-    latitude: number;
-    longitude: number;
-    roadAddress: string;
+    latitude?: number;
+    longitude?: number;
+    address: string;
     name: string;
     score: number
 }

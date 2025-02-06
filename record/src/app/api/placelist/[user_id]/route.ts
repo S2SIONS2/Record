@@ -18,7 +18,7 @@ export async function GET(
   try {
     const { data, error } = await supabase
       .from('placelist')
-      .select('id, name, score, mapx, mapy')
+      .select('id, name, score, mapx, mapy, address')
       .eq('user_id', user_id);
 
     if (error) {
