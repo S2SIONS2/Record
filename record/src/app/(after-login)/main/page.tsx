@@ -8,6 +8,7 @@ import RecordListModal from '@/components/record-list-modal';
 import useSearchStore from '@/store/useSearchStore';
 import PlaceList from '@/components/placelist';
 import usePlaceStore from '@/store/usePlaceStore';
+import useMenuStore from '@/store/useMenuStore';
 
 interface Place {
     id: number;
@@ -20,10 +21,18 @@ interface Place {
     longitude?: number;
 }
 
+interface Menu {
+    id: number,
+    name: string,
+    description: string,
+    is_good: boolean,
+}
+
 export default function Page() {
     // zustand 스토어에서 상태 가져오기
     const { selectedPlace } = useSearchStore() as { selectedPlace: Place | null }; // 모달에서 검색된 place값
     const { placeList, fetchPlaces, subscribeToPlaces } = usePlaceStore() as {placeList: Place[] | null, fetchPlaces: () => Promise<void>, subscribeToPlaces: () => void} // 장소 리스트 
+    const { menuList, fetchMenus, subscribeToMenus } = useMenuStore() as {menuList: Menu[] | null, fetchMenus: () => Promise<void>, subscribeToMenus: () => void} // 메뉴 리스트
 
     // 모달 열기
     const [modalOpen, setModalOpen] = useState<boolean>(true);
@@ -32,8 +41,12 @@ export default function Page() {
     }
 
     useEffect(() => {
-        fetchPlaces() // 전역 placeList 가져오기
-        subscribeToPlaces() // 실시간으로 테이블 변화 감지 후 최신 데이터 가져오기
+        fetchPlaces(); // 전역 placeList 가져오기
+        subscribeToPlaces(); // 실시간으로 테이블 변화 감지 후 최신 데이터 가져오기
+
+        fetchMenus();
+        subscribeToMenus();
+        console.log(menuList)
     }, [])
 
     return (
@@ -50,6 +63,7 @@ export default function Page() {
                 {modalOpen && <RecordListModal />}
                 <PlaceList 
                     placeList={placeList || []}
+                    menuList={menuList || []}
                 />
             </div>
         </div>
