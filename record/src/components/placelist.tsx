@@ -9,6 +9,7 @@ interface Place {
 }
 
 interface Menu {
+    placelist_id: number,
     id: number,
     name: string,
     description: string,
@@ -28,13 +29,19 @@ export default function PlaceList({ placeList, menuList }: PlaceListProps) {
                     <h2>{place.name}</h2>
                     <p>{place.score} / 5</p>
                     {/* <p>{place.address}</p> */}
-                </li>
-            ))}
-            {menuList?.map((menu) => (
-                <li key={menu.id}>
-                    <p>{menu.name}</p>
-                    <p>{menu.is_good}</p>
-                    <p>{menu.description}</p>
+
+                    <ul>
+                        {/* place.id와 placelist_id가 일치하는 메뉴만 필터링하여 출력 */}
+                        {menuList
+                            ?.filter((menu) => menu.placelist_id === place.id)
+                            .map((menu) => (
+                                <li key={menu.id}>
+                                    <p>{menu.name}</p>
+                                    <input type="checkbox" checked={menu.is_good} readOnly />
+                                    <p>{menu.description}</p>
+                                </li>
+                        ))}
+                    </ul>
                 </li>
             ))}
         </ul>

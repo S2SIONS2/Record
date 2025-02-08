@@ -5,7 +5,10 @@ import { useState } from "react";
 import useSearchStore from "@/store/useSearchStore";
 
 export default function RecordListModal() {
-    // search input
+    // zustand
+    const { setSelectedPlace } = useSearchStore();
+
+    // 검색 input 
     const [search, setSearch] = useState('');
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
@@ -25,13 +28,50 @@ export default function RecordListModal() {
     const handlePlaceAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPlaceAddress(e.target.value);
     }
-
+    
     // api 제공 map x, y 값
     const [mapx, setMapx] = useState<number>();
     const [mapy, setMapy] = useState<number>();
+    
 
-    // zustand
-    const { setSelectedPlace } = useSearchStore();
+    // db에 저장 할 메뉴 정보
+    const [menuInfo, setMenuInfo] = useState([{
+        placelist_id: 0, 
+        name: '', 
+        description: '',
+        is_good: false
+    }]);
+
+    const handleMenuName = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+        const newMenus = [...menuInfo || []]
+        newMenus[index].name = e.target.value
+        setMenuInfo(newMenus)
+    }
+
+    const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>, index: number) => {
+        const newMenus = [...menuInfo || []]
+        newMenus[index].description = e.target.value
+        setMenuInfo(newMenus)
+    }
+
+    const handleMenuGood = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+        const newMenus = [...menuInfo || []]
+        newMenus[index].is_good = e.target.checked
+        setMenuInfo(newMenus)
+    }
+
+    // 메뉴 input, textarea 추가
+    const addMenu = () => {
+        setMenuInfo([
+            ...menuInfo,
+            {   
+                placelist_id: 0,
+                name: '', 
+                description: '',
+                is_good: false
+            }
+        ])
+    }
 
     // 가게 검색 시
     const onSubmit = async () => {
@@ -50,7 +90,10 @@ export default function RecordListModal() {
             setPlaceAddress(data.items[0].address)
             // 정규식 활용
             const noTags = data.items[0].title.replace(/<[^>]*>/g, '')
-            setPlaceName(noTags)
+            const parser = new DOMParser();
+            const decodedString = parser.parseFromString(`<!DOCTYPE html><body>${noTags}</body>`, "text/html").body.textContent;
+
+            setPlaceName(decodedString || '')
             setMapx(parseFloat(data.items[0].mapx))
             setMapy(parseFloat(data.items[0].mapy))
 
@@ -64,6 +107,8 @@ export default function RecordListModal() {
 
           return response
     }
+
+    
     // 인풋에서 엔터 입력으로 검색
     const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
@@ -71,9 +116,40 @@ export default function RecordListModal() {
         }
     };
 
-    const supabase = createClient()
+    const supabase = createClient();
 
-    const onRecord = async () => {
+    // placelist, menu 저장
+    const onRecordMenuList = async (placelist_id: number) => {
+        try {
+            const session = await supabase.auth.getSession()
+            const user_id = session.data.session?.user.id;
+            
+            for(let i=0; i < menuInfo.length; i++) {
+                menuInfo[i].placelist_id = placelist_id;
+            }        
+
+
+            // post 요청 - placelist
+            const response = await fetch(`/api/menu/${user_id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({menuInfo: menuInfo})
+            });
+
+            if (!response.ok) {
+                throw new Error('가게 저장에 실패했습니다.');
+            }
+
+            await response.json();
+
+        }catch(err) {
+            console.error(err)
+        }
+    }
+
+    const onRecordPlaceList = async () => {
         try {
             const session = await supabase.auth.getSession()
             const user_id = session.data.session?.user.id;
@@ -87,7 +163,7 @@ export default function RecordListModal() {
                 user_id: user_id
             }
 
-            // post 요청
+            // post 요청 - placelist
             const response = await fetch(`/api/placelist/${session.data.session?.user.id}`, {
                 method: 'POST',
                 headers: {
@@ -99,8 +175,12 @@ export default function RecordListModal() {
             if (!response.ok) {
                 throw new Error('가게 저장에 실패했습니다.');
             }
+            
+            const result =await response.json();
 
-            await response.json();
+            // console.log(result)
+
+            onRecordMenuList(result[0].id)
 
         }catch(err) {
             console.error(err)
@@ -132,7 +212,23 @@ export default function RecordListModal() {
                     <input type="text" value={placeAddress} onChange={handlePlaceAddress} />
                 </div>
                 <div>
-                    <button type="submit" onClick={onRecord}>저장</button>
+                    <div>
+                        메뉴
+                        <button type="button" onClick={addMenu}> + </button>
+                    </div>
+                    {
+                        menuInfo.map((item, index) => (
+                            <div key={index}>
+                                <input type="text" value={item.name} onChange={(e) => handleMenuName(e, index)}/>
+                                <textarea value={item.description} onChange={(e) => handleDescription(e, index)}></textarea>
+                                <input type="checkbox" checked={item.is_good} onChange={(e) => handleMenuGood(e, index)}/>
+                            </div>
+                        ))
+                    }
+                </div>
+                <div>
+                    <button type="submit" onClick={onRecordPlaceList}>저장</button>
+                    <button type="submit">닫기</button>
                 </div>
             </div>
         </div>

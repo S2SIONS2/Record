@@ -3,6 +3,13 @@ import { NextResponse } from "next/server";
 
 const supabase = createClient()
 
+interface Menu {
+    placelist_id: number,
+    name: string,
+    description: string,
+    is_good: boolean
+}
+
 // get
 export async function GET(
     req: Request,
@@ -21,8 +28,6 @@ export async function GET(
     .select('id')
     .eq('user_id', user_id);
 
-    console.log(placeListIds)
-
     if (placelistError) {
     console.error('Error fetching placelist IDs: ', placelistError.message);
     return NextResponse.json({ error: placelistError.message }, { status: 500 });
@@ -31,7 +36,7 @@ export async function GET(
     try {
         const { data, error } = await supabase
         .from('menu')
-        .select('id, name, description, is_good')
+        .select('placelist_id, id, name, description, is_good')
         .in("placelist_id", placeListIds.map((item) => item.id));
 
         if(error) {
@@ -44,5 +49,40 @@ export async function GET(
     }catch(err){
         console.error(err)
         return NextResponse.json({ error: 'Unexpected error occured' }, {status: 500})
+    }
+}
+
+// post
+export async function POST(
+    req:Request,
+    context: {params: Promise<{user_id: string}>}
+) {
+    const { user_id } = await context.params;
+    if(!user_id) {
+        return NextResponse.json({error: 'Missing User Id'}, {status:400})
+    }
+
+    // menu 추가
+    try{
+        const { menuInfo } = await req.json();
+
+        const indata = menuInfo.map(({ placelist_id, name, description, is_good }: Menu) => ({
+            placelist_id,
+            name,
+            description,
+            is_good
+        }));
+        
+        const { data, error } = await supabase
+        .from('menu')
+        .insert(indata)
+
+        if(error) {
+            console.error('메뉴 추가 중 오류 발생', error);
+        }
+
+        return NextResponse.json(data, { status: 200 })
+    }catch(err){
+        console.error(err)
     }
 }

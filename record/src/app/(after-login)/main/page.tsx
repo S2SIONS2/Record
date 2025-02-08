@@ -22,6 +22,7 @@ interface Place {
 }
 
 interface Menu {
+    placelist_id: number,
     id: number,
     name: string,
     description: string,

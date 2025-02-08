@@ -59,6 +59,7 @@ export async function POST(
         user_id: user_id
       }
     ])
+    .select('id')
 
     if (error ){
       console.error('리스트 추가 중 오류 발생', error)
