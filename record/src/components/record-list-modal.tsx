@@ -4,7 +4,11 @@ import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
 import useSearchStore from "@/store/useSearchStore";
 
-export default function RecordListModal() {
+interface SetModalOpen {
+    setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function RecordListModal({ setModalOpen }: SetModalOpen) {
     // zustand
     const { setSelectedPlace } = useSearchStore();
 
@@ -110,7 +114,7 @@ export default function RecordListModal() {
 
     
     // 인풋에서 엔터 입력으로 검색
-    const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
         onSubmit();
         }
@@ -149,6 +153,7 @@ export default function RecordListModal() {
         }
     }
 
+    // placelist id값을 받아온 후 menu 저장 실행
     const onRecordPlaceList = async () => {
         try {
             const session = await supabase.auth.getSession()
@@ -178,8 +183,6 @@ export default function RecordListModal() {
             
             const result =await response.json();
 
-            // console.log(result)
-
             onRecordMenuList(result[0].id)
 
         }catch(err) {
@@ -187,10 +190,15 @@ export default function RecordListModal() {
         }
     }
 
+    // 모달 닫기
+    const onClose = () => {
+        setModalOpen(false)
+    }
+
     return (
         <div>
             <div>
-                <input type="text" value={search} onChange={handleSearch} onKeyDown={onKeyDown} placeholder="가게 이름을 검색해주세요."/>
+                <input type="text" value={search} onChange={handleSearch} onKeyPress={onKeyUp} placeholder="가게 이름을 검색해주세요."/>
                 <button onClick={onSubmit}>검색</button>
             </div>
             <div>
@@ -228,7 +236,7 @@ export default function RecordListModal() {
                 </div>
                 <div>
                     <button type="submit" onClick={onRecordPlaceList}>저장</button>
-                    <button type="submit">닫기</button>
+                    <button type="submit" onClick={onClose}>닫기</button>
                 </div>
             </div>
         </div>

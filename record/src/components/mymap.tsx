@@ -24,6 +24,7 @@ interface MyMapProps {
 
 export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
     const [isLoaded, setIsLoaded] = useState(false);
+    const [map, setMap] = useState<naver.maps.Map | null>(null);
 
     // 현재 위치 상태
     const [currentLocation, setCurrentLocation] = useState<Location>({ lat: 37.5665, lng: 126.978 });
@@ -49,6 +50,8 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
                     lat: Number(item.y),
                     lng: Number(item.x)
                 });
+
+                updateMapCenter(Number(item.y), Number(item.x));
             });
         } else if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
@@ -56,14 +59,23 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 });
+
+                updateMapCenter(position.coords.latitude, position.coords.longitude);
             });
         } else {
             console.error("Geolocation is not supported by this browser.");
         }
     };
 
+    // 지도 중심 업데이트
+    const updateMapCenter = (lat: number, lng: number) => {
+        if (map) {
+            map.setCenter(new naver.maps.LatLng(lat, lng));
+        }
+    };
+
     // 네이버 지도 초기화
-    const initMap = () => {
+    const initMap = async () => {
         if (typeof naver === 'undefined' || !naver.maps) {
             console.error("Naver Maps API is not loaded yet.");
             return;
@@ -83,9 +95,13 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
             }
         };
 
-        const map = new naver.maps.Map('map', mapOptions);
+        const newMap = new naver.maps.Map('map', mapOptions);
+        setMap(newMap);
+        renderMarkers(newMap);
+    };
 
-        // 마커 추가
+    // 마커 렌더링
+    const renderMarkers = (mapInstance: naver.maps.Map) => {
         placeList?.forEach((place) => {
             naver.maps.Service.geocode({
                 query: place.address
@@ -100,7 +116,7 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
 
                 const marker = new naver.maps.Marker({
                     position: new naver.maps.LatLng(Number(item.y), Number(item.x)),
-                    map: map
+                    map: mapInstance
                 });
 
                 // 마커 클릭 시 정보창 표시
@@ -109,7 +125,7 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
                 });
 
                 naver.maps.Event.addListener(marker, "click", function () {
-                    infoWindow.open(map, marker);
+                    infoWindow.open(mapInstance, marker);
                 });
             });
         });
@@ -125,7 +141,7 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
         if (isLoaded) {
             initMap();
         }
-    }, [currentLocation, isLoaded, placeList]);
+    }, [isLoaded, placeList]);
 
     return (
         <>

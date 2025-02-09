@@ -2,13 +2,14 @@
 
 import style from './page.module.css';
 import { useEffect, useState } from 'react';
-// import { createClient } from '@/utils/supabase/client';
-import MyMap from '@/components/mymap';
-import RecordListModal from '@/components/record-list-modal';
-import useSearchStore from '@/store/useSearchStore';
-import PlaceList from '@/components/placelist';
-import usePlaceStore from '@/store/usePlaceStore';
-import useMenuStore from '@/store/useMenuStore';
+
+import useSearchStore from '@/store/useSearchStore'; // zustand 검색된 리스트 스토어
+import usePlaceStore from '@/store/usePlaceStore'; // 저장된 리스트 스토어
+import useMenuStore from '@/store/useMenuStore'; // 저장된 메뉴 스토어
+
+import MyMap from '@/components/mymap'; // 지도 컴포넌트
+import RecordListModal from '@/components/record-list-modal'; // 리스트 추가 모달
+import PlaceList from '@/components/placelist'; // 장소 리스트 컴포넌트
 
 interface Place {
     id: number;
@@ -36,7 +37,7 @@ export default function Page() {
     const { menuList, fetchMenus, subscribeToMenus } = useMenuStore() as {menuList: Menu[] | null, fetchMenus: () => Promise<void>, subscribeToMenus: () => void} // 메뉴 리스트
 
     // 모달 열기
-    const [modalOpen, setModalOpen] = useState<boolean>(true);
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
     const openModal = () => {
         setModalOpen(true);
     }
@@ -45,9 +46,8 @@ export default function Page() {
         fetchPlaces(); // 전역 placeList 가져오기
         subscribeToPlaces(); // 실시간으로 테이블 변화 감지 후 최신 데이터 가져오기
 
-        fetchMenus();
-        subscribeToMenus();
-        console.log(menuList)
+        fetchMenus(); // menulist 가져오기
+        subscribeToMenus(); // 실시간으로 테이블 변화 감지 후 최신 데이터 가져오기
     }, [])
 
     return (
@@ -61,7 +61,9 @@ export default function Page() {
             <div className={style.rightArea}>
 
                 <button type='button' onClick={openModal}> + </button>
-                {modalOpen && <RecordListModal />}
+                {modalOpen && (
+                    <RecordListModal setModalOpen={setModalOpen} />
+                )}
                 <PlaceList 
                     placeList={placeList || []}
                     menuList={menuList || []}

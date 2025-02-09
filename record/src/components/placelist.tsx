@@ -23,27 +23,29 @@ interface PlaceListProps {
 
 export default function PlaceList({ placeList, menuList }: PlaceListProps) {
     return (
-        <ul> 
+        <div> 
             {placeList?.map((place) => (
-                <li key={place.id}>
-                    <h2>{place.name}</h2>
-                    <p>{place.score} / 5</p>
-                    {/* <p>{place.address}</p> */}
+                <details key={place.id}>
+                    <summary>
+                        <h2>{place.name}</h2>
+                        <p>{place.score}점</p>
+                    </summary>
+                        {/* <p>{place.address}</p> */}
 
-                    <ul>
-                        {/* place.id와 placelist_id가 일치하는 메뉴만 필터링하여 출력 */}
-                        {menuList
-                            ?.filter((menu) => menu.placelist_id === place.id)
-                            .map((menu) => (
-                                <li key={menu.id}>
-                                    <p>{menu.name}</p>
-                                    <input type="checkbox" checked={menu.is_good} readOnly />
-                                    <p>{menu.description}</p>
-                                </li>
-                        ))}
-                    </ul>
-                </li>
+                        <ul>
+                            {/* place.id와 placelist_id가 일치하는 메뉴만 필터링하여 출력 */}
+                            {menuList
+                                ?.filter((menu) => menu.placelist_id === place.id)
+                                .map((menu) => (
+                                    <li key={menu.id}>
+                                        <p>{menu.name}</p>
+                                        <input type="checkbox" checked={menu.is_good} readOnly />
+                                        <p>{menu.description}</p>
+                                    </li>
+                            ))}
+                        </ul>
+                </details>
             ))}
-        </ul>
+        </div>
     )
 }
