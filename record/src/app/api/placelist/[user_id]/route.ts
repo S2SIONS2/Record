@@ -18,7 +18,7 @@ export async function GET(
   try {
     const { data, error } = await supabase
       .from('placelist')
-      .select('id, name, score, mapx, mapy, address')
+      .select('id, name, score, mapx, mapy, address, category')
       .eq('user_id', user_id);
 
     if (error) {
@@ -45,7 +45,7 @@ export async function POST(
   }
   try {
     // 리스트 추가 할 데이터 가져오기
-    const { name, score, address, mapx, mapy } = await req.json();
+    const { name, score, address, mapx, mapy, category } = await req.json();
     
     const { data, error } = await supabase
     .from('placelist')
@@ -56,7 +56,8 @@ export async function POST(
         address: address,
         mapx: mapx,
         mapy: mapy,
-        user_id: user_id
+        user_id: user_id,
+        category: category
       }
     ])
     .select('id')

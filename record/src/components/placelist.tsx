@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUtensils, faMugSaucer, faBed, faPlaceOfWorship, faLocationDot } from '@fortawesome/free-solid-svg-icons'
+
 // placelist 테이블 데이터 타입 정의
 interface Place {
     id: number;
@@ -6,6 +9,7 @@ interface Place {
     address: string;
     name: string;
     score: number
+    category: string;
 }
 
 interface Menu {
@@ -21,6 +25,25 @@ interface PlaceListProps {
     menuList: Menu[] | null
 }
 
+const checkCategory = (category: string) => {
+    if (category === '음식점') {
+        return <FontAwesomeIcon icon={faUtensils} />;
+    }
+    if (category === '카페') {
+        return <FontAwesomeIcon icon={faMugSaucer} />;
+    }
+    if (category === '숙소') {
+        return <FontAwesomeIcon icon={faBed} />;
+    }
+    if (category === '여가/테마파크') {
+        return <FontAwesomeIcon icon={faPlaceOfWorship} />;
+    }
+    if (category === '기타') {
+        return <FontAwesomeIcon icon={faLocationDot} />;
+    }
+    return null; // 기본값 추가 (예외처리)
+};
+
 export default function PlaceList({ placeList, menuList }: PlaceListProps) {
     return (
         <div> 
@@ -29,6 +52,7 @@ export default function PlaceList({ placeList, menuList }: PlaceListProps) {
                     <summary>
                         <h2>{place.name}</h2>
                         <p>{place.score}점</p>
+                        <div>{checkCategory(place.category)}</div>
                     </summary>
                         {/* <p>{place.address}</p> */}
 

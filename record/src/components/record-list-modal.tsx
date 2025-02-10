@@ -22,6 +22,8 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
     const [placeName, setPlaceName] = useState(''); // 가게 이름
     const [placeScore, setPlaceScore] = useState<number>(5); // 가게 점수
     const [placeAddress, setPlaceAddress] = useState(''); // 가게 주소
+    const [placeCategory, setPlaceCategory] = useState('') // 가게 카테고리
+    const categoryList = ["음식점", "카페", "숙소", "여가/테마파크", "기타"]
 
     const handlePlaceName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPlaceName(e.target.value);
@@ -32,13 +34,16 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
     const handlePlaceAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPlaceAddress(e.target.value);
     }
+    const handlePlaceCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setPlaceCategory(e.target.value)
+    }
     
     // api 제공 map x, y 값
     const [mapx, setMapx] = useState<number>();
     const [mapy, setMapy] = useState<number>();
     
 
-    // db에 저장 할 메뉴 정보
+    // db에 저장 할 메뉴 리스트 정보
     const [menuInfo, setMenuInfo] = useState([{
         placelist_id: 0, 
         name: '', 
@@ -163,9 +168,10 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
                 name: placeName,
                 score: placeScore,
                 address: placeAddress,
+                category: placeCategory,
                 mapx: mapx,
                 mapy: mapy,
-                user_id: user_id
+                user_id: user_id,
             }
 
             // post 요청 - placelist
@@ -214,6 +220,18 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
                             <option value="1">1</option>
                         </select>
                     </div>
+                </div>
+                <div>
+                    <p>가게 분류</p>
+                    <select value={placeCategory} onChange={handlePlaceCategory}>
+                        {
+                            categoryList.map((item) => (
+                                <option value={item} key={item}>
+                                    {item}
+                                </option>
+                            ))
+                        }
+                    </select>
                 </div>
                 <div>
                     <p>주소</p>

@@ -20,6 +20,7 @@ interface Place {
     mapy: number;
     latitude?: number;
     longitude?: number;
+    category: string;
 }
 
 interface Menu {
@@ -58,12 +59,13 @@ export default function Page() {
                     placeList={placeList || []}
                 />
             </div>
+            {/* 리스트 추가 모달 */}
+            {modalOpen && (
+                <RecordListModal setModalOpen={setModalOpen} />
+            )}
             <div className={style.rightArea}>
 
                 <button type='button' onClick={openModal}> + </button>
-                {modalOpen && (
-                    <RecordListModal setModalOpen={setModalOpen} />
-                )}
                 <PlaceList 
                     placeList={placeList || []}
                     menuList={menuList || []}
