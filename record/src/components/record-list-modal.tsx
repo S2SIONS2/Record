@@ -3,6 +3,10 @@
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
 import useSearchStore from "@/store/useSearchStore";
+import style from "./record-list-modal.module.css";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faThumbsUp } from '@fortawesome/free-regular-svg-icons'
 
 interface SetModalOpen {
     setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -202,15 +206,23 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
     }
 
     return (
-        <div>
-            <div>
-                <input type="text" value={search} onChange={handleSearch} onKeyPress={onKeyUp} placeholder="가게 이름을 검색해주세요."/>
+        <div className={style.recordModal}>
+            <h4 className={style.modalTitle}>리스트 추가</h4>
+            <div className={style.flex}>
+                <input 
+                    type="text" 
+                    value={search} 
+                    onChange={handleSearch} 
+                    onKeyPress={onKeyUp} 
+                    className={style.searchInput}
+                    placeholder="가게 이름을 검색해주세요."
+                />
                 <button onClick={onSubmit}>검색</button>
             </div>
-            <div>
+            <div className={style.inputWrap}>
                 <div>
-                    <p>가게 명</p>
-                    <div>
+                    <p>가게 명 & 별점</p>
+                    <div className={style.flex}>
                         <input type="text" value={placeName} onChange={handlePlaceName} required/>
                         <select value={placeScore} onChange={handlePlaceScore} required>
                             <option value="5" defaultValue={5}>5</option>
@@ -238,23 +250,27 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
                     <input type="text" value={placeAddress} onChange={handlePlaceAddress} />
                 </div>
                 <div>
-                    <div>
+                    <div className={style.flexBetween}>
                         메뉴
-                        <button type="button" onClick={addMenu}> + </button>
+                        <button type="button" onClick={addMenu}> 메뉴 추가 </button>
                     </div>
                     {
                         menuInfo.map((item, index) => (
-                            <div key={index}>
-                                <input type="text" value={item.name} onChange={(e) => handleMenuName(e, index)}/>
-                                <textarea value={item.description} onChange={(e) => handleDescription(e, index)}></textarea>
-                                <input type="checkbox" checked={item.is_good} onChange={(e) => handleMenuGood(e, index)}/>
+                            <div key={index} className={style.menuWrap}>
+                                <div className={style.menuSet}>
+                                    <input type="text" value={item.name} onChange={(e) => handleMenuName(e, index)}/>
+                                    <label>
+                                        <input type="checkbox" checked={item.is_good} onChange={(e) => handleMenuGood(e, index)}/>
+                                    </label>
+                                </div>
+                                <textarea value={item.description} onChange={(e) => handleDescription(e, index)} className={style.textArea}></textarea>
                             </div>
                         ))
                     }
                 </div>
-                <div>
-                    <button type="submit" onClick={onRecordPlaceList}>저장</button>
-                    <button type="submit" onClick={onClose}>닫기</button>
+                <div className={style.btn_wrap}>
+                    <button type="submit" onClick={onRecordPlaceList} className={style.submitBtn}>저장</button>
+                    <button type="submit" onClick={onClose} className={style.closeBtn}>닫기</button>
                 </div>
             </div>
         </div>

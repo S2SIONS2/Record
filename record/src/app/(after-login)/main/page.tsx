@@ -60,16 +60,18 @@ export default function Page() {
                 />
             </div>
             {/* 리스트 추가 모달 */}
-            {modalOpen && (
-                <RecordListModal setModalOpen={setModalOpen} />
-            )}
             <div className={style.rightArea}>
-
-                <button type='button' onClick={openModal}> + </button>
+                {modalOpen && (
+                    <RecordListModal setModalOpen={setModalOpen} />
+                )}
+                <div className={style.listTitle}>
+                    <p>My Places</p>
+                    <button type='button' onClick={openModal}> + </button>
+                </div>
                 <PlaceList 
                     placeList={placeList || []}
                     menuList={menuList || []}
-                />
+                    />
             </div>
         </div>
     );

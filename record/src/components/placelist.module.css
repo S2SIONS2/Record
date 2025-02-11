@@ -1,0 +1,209 @@
+.listWrap {
+    width: 100%;
+    height: calc(100% - 50px);
+
+    box-sizing: border-box;
+    padding: 10px;
+}
+.btnWrap{
+    width: 100%;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    flex-wrap: nowrap;
+    margin-bottom: 10px;
+
+    width: 100%;
+    overflow-x: auto;
+}
+.btnWrap::-webkit-scrollbar-track,
+.btnWRap::-webkit-scrollbar{
+    background-color: transparent;
+}
+.tabWrap{
+    width: 100%;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-wrap: nowrap;
+    
+    width: 100%;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+.analysisBtn{
+    background-color: transparent;
+    border-radius: 5px;
+    padding: 5px;
+
+    white-space: nowrap;
+}
+.analysisBtn:hover{
+    background-color: #fbbbbb;
+}
+.categorysTab{
+    background-color: transparent;
+    border-radius: 5px;
+    padding: 8px 10px;
+
+    white-space: nowrap;
+
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+
+    border-bottom: none;
+}
+.listArea{
+    width: 100%;
+    height: calc(100% - 74px);
+
+    box-sizing: border-box;
+    padding: 10px;
+
+    border: 2px solid #000;
+    border-radius: 5px;
+}
+.categorysBtn{
+    background-color: transparent;
+    border-radius: 5px;
+    padding: 5px;
+
+}
+.categorysBtn:hover{
+    background-color: #ffe59e;
+}
+.list{
+    width: 100%;
+    height: calc(100% - 40px);
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.list::-webkit-scrollbar-track,
+.list::-webkit-scrollbar{
+    background-color: transparent;
+    width: 10px;
+}
+.list::-webkit-scrollbar-thumb{
+    background-color: #dfdfdf;
+    border-radius: 10px;
+}
+.details{
+    /* width: 100%; */
+    cursor: pointer;
+
+    border: 2px solid #000;
+    border-radius: 10px;
+
+}
+.details:not(:last-child){
+    margin-bottom: 0.5rem;
+}
+
+.summary {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    list-style-type: none;
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.categoryImage{
+    width: 60px;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.8rem;
+    color: #a1a1a1;
+
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+/* 아이콘 색상 지정 */
+.categoryImage:has(.restaurant) {
+    color: #fbbbbb;
+}
+.categoryImage:has(.cafe){
+    color: #ffbd00;
+}
+.categoryImage:has(.accom) {
+    color: #60a463;
+}
+.categoryImage:has(.park) {
+    color: #e1b7ff;
+}
+.categoryImage:has(.etc){
+    color: #757575;
+}
+.categorySummary{
+    width: calc(100% - 60px);
+    height: 100%;
+
+    box-sizing: border-box;
+    padding: 10px;
+}
+.placeName{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    font-size: 1.2rem;
+
+    width: 100%;
+}
+.stars{
+    color: #ffe59e;
+}
+.menuWrap{
+    box-sizing: border-box;
+    padding: 10px;
+}
+.menuList{
+    margin-bottom: 0.5rem;
+
+    border-bottom: 1px solid #000;
+}
+.menuTitle{
+    display: flex;
+    align-items: center;
+    gap:10px;
+    margin-bottom: 0.5rem;
+
+    font-size: 1.1rem;
+
+}
+/* checkbox custom css */
+.menuTitle label{
+    width: 35px;
+    height: 20px;
+    border-radius: 50px;
+
+    cursor: pointer;
+}
+.menuTitle label:has(input:checked){
+    border: 2px solid #ffe59e;
+    color: #ffe59e;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.menuTitle input[type="checkbox"] {
+    appearance: none;
+}
+
+/* Safari 브라우저용 사용자 정의 스타일 */
+.summary::-webkit-details-marker { 
+    display: none;
+}
