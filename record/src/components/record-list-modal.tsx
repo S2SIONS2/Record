@@ -201,6 +201,9 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
         }catch(err) {
             console.error(err)
         }
+
+        // 모달 닫기
+        setModalOpen(false)
     }
 
     // 모달 닫기

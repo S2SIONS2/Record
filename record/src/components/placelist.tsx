@@ -1,7 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUtensils, faMugSaucer, faBed, faPlaceOfWorship, faLocationDot, faStar } from '@fortawesome/free-solid-svg-icons'
+import { faUtensils, faMugSaucer, faBed, faPlaceOfWorship, faLocationDot, faStar, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons'
 import style from './placelist.module.css';
+import { createClient } from '@/utils/supabase/client';
 
 // placelist 테이블 데이터 타입 정의
 interface Place {
@@ -26,6 +27,7 @@ interface PlaceListProps {
     placeList: Place[] | null;
     menuList: Menu[] | null
 }
+
 // 카테고리 별 서머리 이미지
 const checkCategory = (category: string) => {
     if (category === '음식점') {
@@ -46,7 +48,7 @@ const checkCategory = (category: string) => {
     return <FontAwesomeIcon icon={faLocationDot} />; // 기본값 추가 (예외처리)
 };
 
-// 별점 순 별 표시
+// 별점 별 표시
 const setStars = (score: number) => {
     const stars = [];
     for(let i = 0; i < score; i++) {
@@ -56,6 +58,27 @@ const setStars = (score: number) => {
     //     <FontAwesomeIcon icon={faStar} key={i} />
     // ))}
     return <div className={style.stars}>{stars}</div>;
+}
+
+// 메뉴 삭제
+const supabase = createClient(); // supabase 호출
+const deleteMenu = async (id: number) => {
+    const session = await supabase.auth.getSession()
+    const user_id = session.data.session?.user.id;
+
+    const response = await fetch(`/api/menu/${user_id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({id: id})
+    })
+
+    await response.json();
+
+    if(!response.ok) {
+        throw new Error('메뉴 삭제에 실패했습니다.');
+    }
 }
 
 export default function PlaceList({ placeList, menuList }: PlaceListProps) {
@@ -94,6 +117,7 @@ export default function PlaceList({ placeList, menuList }: PlaceListProps) {
                                 {/* <p>{place.address}</p> */}
 
                                 <ul className={style.menuWrap}>
+                                    <button type='button' className={style.btn}>메뉴 관리</button>
                                     {/* place.id와 placelist_id가 일치하는 메뉴만 필터링하여 출력 */}
                                     {menuList
                                         ?.filter((menu) => menu.placelist_id === place.id)
@@ -109,17 +133,18 @@ export default function PlaceList({ placeList, menuList }: PlaceListProps) {
                                                             </label> 
                                                             : null
                                                     }
-                                                    {/* <label>
-                                                        {
-                                                            menu.is_good ? <input type="checkbox" id='checkInput' checked={menu.is_good} readOnly /> : null
-                                                        }
-                                                        <input type="checkbox" id='checkInput' checked={menu.is_good} readOnly />
-                                                    </label> */}
+                                                    <button type='submit' onClick={() => deleteMenu(menu.id)}>
+                                                        <FontAwesomeIcon icon={faMinus} />
+                                                    </button>
                                                 </div>
                                                 <p>{menu.description}</p>
                                             </li>
                                     ))}
                                 </ul>
+                                <div className={style.controlBtnWrap}>                                    
+                                    <button type='button' className={style.btn}>수정</button>
+                                    <button type='button' className={style.btn}>삭제</button>
+                                </div>
                         </details>
                     ))}
                 </div>

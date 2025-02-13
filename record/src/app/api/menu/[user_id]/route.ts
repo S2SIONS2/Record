@@ -7,8 +7,10 @@ interface Menu {
     placelist_id: number,
     name: string,
     description: string,
-    is_good: boolean
+    is_good: boolean,
+    id? :number,
 }
+
 
 // get
 export async function GET(
@@ -79,6 +81,37 @@ export async function POST(
 
         if(error) {
             console.error('메뉴 추가 중 오류 발생', error);
+        }
+
+        return NextResponse.json(data, { status: 200 })
+    }catch(err){
+        console.error(err)
+    }
+}
+
+export async function DELETE(
+    req: Request,
+    context: { params: Promise<{ user_id: string}>}
+) {
+    const { user_id } = await context.params;
+    if(!user_id) {
+        return NextResponse.json({error: 'Missing User Id'}, {status:400})
+    }
+ 
+    // menu 삭제
+    try {
+        const { id } = await req.json();
+        // const indata = menuInfo.map(({ id }: Menu) => ({
+        //     id
+        // }));
+
+        const { data, error } = await supabase
+        .from('menu')
+        .delete()
+        .eq("id", id)
+
+        if(error) {
+            console.error('메뉴 삭제 중 오류 발생', error);
         }
 
         return NextResponse.json(data, { status: 200 })
