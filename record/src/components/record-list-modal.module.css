@@ -48,6 +48,7 @@
     border-radius: 5px;
 }
 .recordModal select{
+    min-width: 80px;
     height: 29px;
 }
 .recordModal p + select{

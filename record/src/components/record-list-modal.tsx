@@ -5,9 +5,6 @@ import { useState } from "react";
 import useSearchStore from "@/store/useSearchStore";
 import style from "./record-list-modal.module.css";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsUp } from '@fortawesome/free-regular-svg-icons'
-
 interface SetModalOpen {
     setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -73,7 +70,7 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
         setMenuInfo(newMenus)
     }
 
-    // 메뉴 input, textarea 추가
+    // 버튼 클릭 시 메뉴 input, textarea 추가
     const addMenu = () => {
         setMenuInfo([
             ...menuInfo,
@@ -84,6 +81,12 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
                 is_good: false
             }
         ])
+    }
+
+    // 버튼 클릭 시 메뉴 input, textarea 삭제
+    const deleteMenu = (index: number) => {
+        const newMenuList = menuInfo.filter((_, i) => i !== index)
+        setMenuInfo(newMenuList)
     }
 
     // 가게 검색 시
@@ -202,6 +205,13 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
 
     // 모달 닫기
     const onClose = () => {
+        if(placeName != '' || placeAddress != '') {
+            if(!confirm("작성중인 리스트가 있습니다. 종료하시겠습니까?")){
+                return
+            }else {
+                setModalOpen(false)
+            }
+        }
         setModalOpen(false)
     }
 
@@ -262,6 +272,7 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
                                     <label>
                                         <input type="checkbox" checked={item.is_good} onChange={(e) => handleMenuGood(e, index)}/>
                                     </label>
+                                    <button type="button" onClick={() => deleteMenu(index)}> X </button>
                                 </div>
                                 <textarea value={item.description} onChange={(e) => handleDescription(e, index)} className={style.textArea}></textarea>
                             </div>
