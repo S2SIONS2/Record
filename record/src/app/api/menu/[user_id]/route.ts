@@ -123,7 +123,7 @@ export async function PUT(
     }
 }
 
-// delete (메뉴 한개만)
+// delete 
 export async function DELETE(
     req: Request,
     context: { params: Promise<{ user_id: string}>}
