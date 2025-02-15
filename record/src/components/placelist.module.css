@@ -1,3 +1,9 @@
+.flex{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
 .listWrap {
     width: 100%;
     height: calc(100% - 50px);
@@ -180,6 +186,10 @@
 .menuTitle{
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
+
     gap:10px;
     margin-bottom: 0.5rem;
 

@@ -38,8 +38,7 @@ export const usePlaceStore = create<StoreState>((set) => ({
           .on(
             "postgres_changes",
             { event: "*", schema: "public", table: "placelist" }, // 실시간으로 "placelist" 테이블 감지
-            async (payload) => {
-              console.log("Supabase Change Detected:", payload);
+            async () => {              
               const { data } = await supabase.from("placelist").select("*"); // 최신 데이터 가져오기
               set({ placeList: data || [] });
             }

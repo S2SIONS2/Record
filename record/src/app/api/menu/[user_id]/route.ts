@@ -31,8 +31,8 @@ export async function GET(
     .eq('user_id', user_id);
 
     if (placelistError) {
-    console.error('Error fetching placelist IDs: ', placelistError.message);
-    return NextResponse.json({ error: placelistError.message }, { status: 500 });
+        console.error('Error fetching placelist IDs: ', placelistError.message);
+        return NextResponse.json({ error: placelistError.message }, { status: 500 });
     }
     
     try {
@@ -88,7 +88,42 @@ export async function POST(
         console.error(err)
     }
 }
+// put
+export async function PUT(
+    req:Request,
+    context: { params: Promise<{ user_id: string }>}
+) {
+    const { user_id } = await context.params;
+    if(!user_id) {
+        return NextResponse.json({error: 'Missing User Id'}, {status:400})
+    }
 
+    // menu 추가
+    try{
+        const { menuInfo } = await req.json();
+
+        const indata = menuInfo.map(({ placelist_id, name, description, is_good }: Menu) => ({
+            placelist_id,
+            name,
+            description,
+            is_good
+        }));
+        
+        const { data, error } = await supabase
+        .from('menu')
+        .insert(indata)
+
+        if(error) {
+            console.error('메뉴 추가 중 오류 발생', error);
+        }
+
+        return NextResponse.json(data, { status: 200 })
+    }catch(err){
+        console.error(err)
+    }
+}
+
+// delete 
 export async function DELETE(
     req: Request,
     context: { params: Promise<{ user_id: string}>}
@@ -101,9 +136,6 @@ export async function DELETE(
     // menu 삭제
     try {
         const { id } = await req.json();
-        // const indata = menuInfo.map(({ id }: Menu) => ({
-        //     id
-        // }));
 
         const { data, error } = await supabase
         .from('menu')

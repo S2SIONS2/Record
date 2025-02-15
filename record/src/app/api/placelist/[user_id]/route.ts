@@ -73,4 +73,34 @@ export async function POST(
 }
 
 // put
+
 // delete
+export async function DELETE(
+  req: Request,
+  context: {params: Promise<{user_id: string}>}
+) {
+  const { user_id } = await context.params;
+
+  if (!user_id) {
+    return NextResponse.json({ error: 'Missing user ID' }, { status: 400 });
+  }
+
+  try {
+    const { id } = await req.json();
+
+    const { data, error } = await supabase
+      .from('placelist')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Supabase Error:', error.message);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json(data, { status: 200 });
+  } catch (err) {
+    console.error('Unexpected Error:', err);
+    return NextResponse.json({ error: 'Unexpected error occurred' }, { status: 500 });
+  }
+}

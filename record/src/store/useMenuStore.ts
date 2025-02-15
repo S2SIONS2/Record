@@ -20,7 +20,7 @@ export const useMenuStore = create<MenuState>((set) => ({
 
     fetchMenus: async() => {
         const session = await supabase.auth.getSession();
-        // console.log(session)
+        
         const response = await fetch(`/api/menu/${session.data.session?.user.id}`)
         if(!response.ok) {
             throw new Error('Failed to fetch lists');
@@ -36,8 +36,7 @@ export const useMenuStore = create<MenuState>((set) => ({
         .on(
             "postgres_changes",
             {event: "*", schema: "public", table: "menu"},
-            async (payload) => {
-                console.log("supabase change detected: ", payload);
+            async () => {
                 const { data } = await supabase.from('menu').select("*");
                 set({ menuList: data || []})
             }

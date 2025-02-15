@@ -1,0 +1,74 @@
+.menuModal{
+    padding: 10px;
+    box-sizing: border-box;
+}
+.menuSet{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.textArea{
+    width: 100%;
+    min-height: 50px;
+    resize: none;
+
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.menuSet input {
+    width: 100%;
+    height: 25px;
+    padding-left: 5px;
+}
+
+/* 추천 버튼 커스텀 css */
+.menuSet label{
+    width: 45px;
+    height: 30px;
+    border-radius: 50px;
+
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #a1a1a1;
+    color: #a1a1a1;
+
+    cursor: pointer;
+    position: relative;
+}
+.menuSet label::before{
+    content: '\f164';
+    font-family: "Font Awesome 6 Free";
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.menuSet label:has(input:checked){
+    border: 2px solid #ffd972;
+    color: #ffd972;
+}
+.menuSet input[type="checkbox"] {
+    appearance: none;
+}
+
+
+/* 하단 버튼 영역 */
+.btn_wrap{
+    width: 100%;
+    display: flex;
+    gap: 5px;
+}
+.btn_wrap button {
+    flex: 1;
+
+    height: 30px;
+    font-size: 1rem;
+}
+.submitBtn{
+    background-color: #0089bf !important;
+    color: #fff;
+}

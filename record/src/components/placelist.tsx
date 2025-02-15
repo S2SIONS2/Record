@@ -3,6 +3,7 @@ import { faUtensils, faMugSaucer, faBed, faPlaceOfWorship, faLocationDot, faStar
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons'
 import style from './placelist.module.css';
 import { createClient } from '@/utils/supabase/client';
+import MenuList from './menulist';
 
 // placelist 테이블 데이터 타입 정의
 interface Place {
@@ -60,24 +61,49 @@ const setStars = (score: number) => {
     return <div className={style.stars}>{stars}</div>;
 }
 
-// 메뉴 삭제
 const supabase = createClient(); // supabase 호출
+const session = await supabase.auth.getSession()
+const user_id = session.data.session?.user.id; // user_id 체크
+
+// 메뉴 삭제
 const deleteMenu = async (id: number) => {
-    const session = await supabase.auth.getSession()
-    const user_id = session.data.session?.user.id;
+    if(!confirm('메뉴를 삭제하시겠습니까?')){
+        return
+    }else {
+        const response = await fetch(`/api/menu/${user_id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id: id})
+        })
+    
+        await response.json();
+    
+        if(!response.ok) {
+            throw new Error('메뉴 삭제에 실패했습니다.');
+        }
+    }
+}
 
-    const response = await fetch(`/api/menu/${user_id}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({id: id})
-    })
-
-    await response.json();
-
-    if(!response.ok) {
-        throw new Error('메뉴 삭제에 실패했습니다.');
+// placelist 삭제
+const deleteList = async (id: number) => {
+    if(!confirm('리스트를 삭제하시겠습니까?')){
+        return
+    }else {
+        const response = await fetch(`/api/placelist/${user_id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id: id})
+        })
+    
+        await response.json();
+    
+        if(!response.ok) {
+            throw new Error('메뉴 삭제에 실패했습니다.');
+        }
     }
 }
 
@@ -117,23 +143,29 @@ export default function PlaceList({ placeList, menuList }: PlaceListProps) {
                                 {/* <p>{place.address}</p> */}
 
                                 <ul className={style.menuWrap}>
-                                    <button type='button' className={style.btn}>메뉴 관리</button>
+                                    <details className={style.menuModal}>
+                                        <summary>메뉴 추가</summary>
+                                        <MenuList placelist_id = {place.id} />
+                                    </details>                                    
+
                                     {/* place.id와 placelist_id가 일치하는 메뉴만 필터링하여 출력 */}
                                     {menuList
                                         ?.filter((menu) => menu.placelist_id === place.id)
                                         .map((menu) => (
                                             <li key={menu.id} className={style.menuList}>
                                                 <div className={style.menuTitle}>
-                                                    <p>{menu.name}</p>
-                                                    {
-                                                        menu.is_good ? 
-                                                            <label>
-                                                                <input type="checkbox" id='checkInput' checked={menu.is_good} readOnly />
-                                                                <FontAwesomeIcon icon={faThumbsUp} />
-                                                            </label> 
-                                                            : null
-                                                    }
-                                                    <button type='submit' onClick={() => deleteMenu(menu.id)}>
+                                                    <div className={style.flex}>
+                                                        <p>{menu.name}</p>
+                                                        {
+                                                            menu.is_good ? 
+                                                                <label>
+                                                                    <input type="checkbox" id='checkInput' checked={menu.is_good} readOnly />
+                                                                    <FontAwesomeIcon icon={faThumbsUp} />
+                                                                </label> 
+                                                                : null
+                                                        }
+                                                    </div>
+                                                    <button type='submit' onClick={() => deleteMenu(menu.id)} className={style.btn}>
                                                         <FontAwesomeIcon icon={faMinus} />
                                                     </button>
                                                 </div>
@@ -143,7 +175,7 @@ export default function PlaceList({ placeList, menuList }: PlaceListProps) {
                                 </ul>
                                 <div className={style.controlBtnWrap}>                                    
                                     <button type='button' className={style.btn}>수정</button>
-                                    <button type='button' className={style.btn}>삭제</button>
+                                    <button type='button' className={style.btn} onClick={() => deleteList(place.id)}>삭제</button>
                                 </div>
                         </details>
                     ))}

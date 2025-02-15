@@ -13,6 +13,8 @@
     overflow: auto;
 
     background-color: #fff;
+
+    z-index: 999;
     
 }
 .modalTitle{
@@ -28,6 +30,15 @@
     align-items: center;
     justify-content: space-between;
     gap: 5px;
+}
+.recordModal {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.recordModal p{
+    font-size: 14px;
+    color: #a1a1a1;
 }
 .recordModal input{
     width: 100%;
