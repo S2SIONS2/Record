@@ -232,7 +232,7 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
                 />
                 <button onClick={onSubmit}>검색</button>
             </div>
-            <p>* 원하는 가게가 검색되지 않나요? 띄어쓰기 포함 제목을 정확하게 입력해주세요.</p>
+            <p className={style.notice}>* 원하는 가게가 검색되지 않나요? 띄어쓰기 포함 제목을 정확하게 입력해주세요.</p>
             <div className={style.inputWrap}>
                 <div>
                     <p>가게 명 & 별점</p>

@@ -29,7 +29,8 @@ interface PlaceListProps {
     menuList: Menu[] | null
 }
 
-// 카테고리 별 서머리 이미지
+export default function PlaceList({ placeList, menuList }: PlaceListProps) {
+    // 카테고리 별 서머리 이미지
 const checkCategory = (category: string) => {
     if (category === '음식점') {
         return <FontAwesomeIcon icon={faUtensils} className={style.restaurant}/>;
@@ -62,11 +63,12 @@ const setStars = (score: number) => {
 }
 
 const supabase = createClient(); // supabase 호출
-const session = await supabase.auth.getSession()
-const user_id = session.data.session?.user.id; // user_id 체크
 
 // 메뉴 삭제
 const deleteMenu = async (id: number) => {
+    const session = await supabase.auth.getSession()
+    const user_id = session.data.session?.user.id; // user_id 체크
+
     if(!confirm('메뉴를 삭제하시겠습니까?')){
         return
     }else {
@@ -87,11 +89,12 @@ const deleteMenu = async (id: number) => {
 }
 
 // placelist 삭제
+// 메뉴 없을 때
 const deleteList = async (id: number) => {
-    if(!confirm('리스트를 삭제하시겠습니까?')){
-        return
-    }else {
-        const response = await fetch(`/api/placelist/${user_id}`, {
+    const session = await supabase.auth.getSession()
+    const user_id = session.data.session?.user.id; // user_id 체크
+
+    const response = await fetch(`/api/placelist/${user_id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -103,11 +106,40 @@ const deleteList = async (id: number) => {
     
         if(!response.ok) {
             throw new Error('메뉴 삭제에 실패했습니다.');
-        }
     }
 }
+const deleteAllLists = async (id: number) => {
+    if(!confirm('리스트를 삭제하시겠습니까?')){
+        return
+    }else {
+        // 해당 리스트에 메뉴가 있는지 체크
+        const filteredMenuList = menuList?.filter(item => item.placelist_id === id);
 
-export default function PlaceList({ placeList, menuList }: PlaceListProps) {
+        // 메뉴가 있다면
+        if(filteredMenuList && filteredMenuList.length > 0) {
+            // 메뉴 삭제 먼저
+            const session = await supabase.auth.getSession()
+            const user_id = session.data.session?.user.id; // user_id 체크
+
+            const responseAll = await fetch(`/api/menu/all/${user_id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ placelist_id: id }) // 전체 삭제
+            });
+        
+            if(!responseAll.ok) {
+                throw new Error('메뉴 삭제에 실패했습니다.');
+            }
+            // 메뉴 삭제 후 리스트 삭제
+            deleteList(id)
+        }else{
+            deleteList(id)
+        }
+        
+    }
+}
     return (
         <div className={style.listWrap}>
             <div className={style.btnWrap}>
@@ -175,7 +207,7 @@ export default function PlaceList({ placeList, menuList }: PlaceListProps) {
                                 </ul>
                                 <div className={style.controlBtnWrap}>                                    
                                     <button type='button' className={style.btn}>수정</button>
-                                    <button type='button' className={style.btn} onClick={() => deleteList(place.id)}>삭제</button>
+                                    <button type='button' className={style.btn} onClick={() => deleteAllLists(place.id)}>삭제</button>
                                 </div>
                         </details>
                     ))}
