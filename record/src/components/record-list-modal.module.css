@@ -36,7 +36,7 @@
     flex-direction: column;
     gap: 10px;
 }
-.recordModal p{
+.notice{
     font-size: 14px;
     color: #a1a1a1;
 }

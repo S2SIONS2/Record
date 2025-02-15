@@ -69,7 +69,6 @@ export default function MenuList( { placelist_id }: idNum ) {
                 menuInfo[i].placelist_id = placelist_id;
             }        
 
-
             // post 요청 - placelist
             const response = await fetch(`/api/menu/${user_id}`, {
                 method: 'POST',
