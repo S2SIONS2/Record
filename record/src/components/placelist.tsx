@@ -5,6 +5,7 @@ import style from './placelist.module.css';
 import { createClient } from '@/utils/supabase/client';
 import MenuList from './menulist';
 import Link from 'next/link';
+import OrderbyBtn from './orderby-btn';
 
 // placelist 테이블 데이터 타입 정의
 interface Place {
@@ -31,7 +32,7 @@ interface PlaceListProps {
 }
 
 export default function PlaceList({ placeList, menuList }: PlaceListProps) {
-    // 카테고리 별 서머리 이미지
+// 카테고리 별 서머리 이미지
 const checkCategory = (category: string) => {
     if (category === '음식점') {
         return <FontAwesomeIcon icon={faUtensils} className={style.restaurant}/>;
@@ -144,11 +145,7 @@ const deleteAllLists = async (id: number) => {
 
     return (
         <div className={style.listWrap}>
-            <div className={style.btnWrap}>
-                <button type='button' className={style.analysisBtn}>별점</button>
-                <button type='button' className={style.analysisBtn}>가게명</button>
-                <button type='button' className={style.analysisBtn}>근처</button>
-            </div>
+            <OrderbyBtn />
             <div className={style.tabWrap}>
                 <button type='button' className={style.categorysTab}>카테고리</button>
                 <button type='button' className={style.categorysTab}>All</button>

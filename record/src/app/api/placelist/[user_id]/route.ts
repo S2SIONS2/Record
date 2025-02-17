@@ -16,10 +16,14 @@ export async function GET(
   }
 
   try {
+    const { searchParams } = new URL(req.url);
+    const orderBy = searchParams.get("order") || "name";
+
     const { data, error } = await supabase
       .from('placelist')
       .select('id, name, score, mapx, mapy, address, category')
-      .eq('user_id', user_id);
+      .eq('user_id', user_id)
+      .order(orderBy, { ascending: false })
 
     if (error) {
       console.error('Supabase Error:', error.message);

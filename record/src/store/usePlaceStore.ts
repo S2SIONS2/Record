@@ -11,19 +11,25 @@ interface Place {
   
 interface StoreState {
     placeList: Place[] | null;
+    orderBy: string;
+    setOrderBy: (order: string) => void;
     fetchPlaces: () => Promise<void>;
     subscribeToPlaces: () => void
 }
 
 const supabase = createClient();
 
-export const usePlaceStore = create<StoreState>((set) => ({    
+export const usePlaceStore = create<StoreState>((set, get) => ({    
     placeList: [],
+    orderBy: "name",
+
+    setOrderBy: (order) => set({ orderBy: order }),
     
     fetchPlaces: async () => {
         const session = await supabase.auth.getSession();
+        const orderBy = get().orderBy;
 
-        const response = await fetch(`/api/placelist/${session.data.session?.user.id}`);
+        const response = await fetch(`/api/placelist/${session.data.session?.user.id}?order=${orderBy}`);
         if(!response.ok) {
             throw new Error('Failed to fetch lists');
         }
@@ -39,7 +45,8 @@ export const usePlaceStore = create<StoreState>((set) => ({
             "postgres_changes",
             { event: "*", schema: "public", table: "placelist" }, // 실시간으로 "placelist" 테이블 감지
             async () => {              
-              const { data } = await supabase.from("placelist").select("*"); // 최신 데이터 가져오기
+              const orderBy = get().orderBy
+              const { data } = await supabase.from("placelist").select("*").order(orderBy, { ascending: false }); // 최신 데이터 가져오기
               set({ placeList: data || [] });
             }
           )
