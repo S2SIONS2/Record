@@ -10,7 +10,7 @@ export default function OrderbyBtn() {
     const buttons = [
         { label: "별점", value: "score" },
         { label: "가게명", value: "name" },
-        { label: "근처", value: "mapx" }
+        // { label: "근처", value: "mapx" }
     ];
 
     const handleClick = async (index: number, value: string) => {
