@@ -83,11 +83,12 @@ export async function PUT(
   }
 
   try {
-    const { id, name, score, category } = await req.json();
+    // const { id, name, score, category } = await req.json();
+    const placeList = await req.json();
     const { data, error } = await supabase
     .from('placelist')
-    .upsert({ id: id, name: name, score: score,  category: category, })
-    .select()
+    .upsert(placeList, { onConflict: "id"})
+    // .select()
 
     if (error ){
       console.error('리스트 수정 중 오류 발생', error)

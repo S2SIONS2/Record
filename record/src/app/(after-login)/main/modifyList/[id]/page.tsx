@@ -1,7 +1,7 @@
 "use client";
 
 import { createClient } from "@/utils/supabase/client";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import style from "./page.module.css";
 import Link from "next/link";
@@ -25,6 +25,8 @@ interface Menu {
 export default function Page() {
     const searchParams = useSearchParams();
     const id = searchParams?.get("id");
+
+    const router = useRouter();
 
     const [isLoad, setIsLoad] = useState(false);
     const [place, setPlace] = useState<Place | null>(null);
@@ -62,6 +64,7 @@ export default function Page() {
 
     // 메뉴 폼
     const [form, setForm] = useState({
+        id: place?.id,
         name: "",
         score: 5,
         address: "",
@@ -71,6 +74,7 @@ export default function Page() {
     useEffect(() => {
         if (place) {
             setForm({
+                id: place.id,
                 name: place.name || "",
                 score: place.score || 5,
                 address: place.address || "",
@@ -113,9 +117,30 @@ export default function Page() {
         await response.json();
     }
 
-    const onModifyList = () => {
+    const onModifyList = async () => {
+        try{
 
-        onModifyMenu();
+            const session = await supabase.auth.getSession();
+            const userId = session.data.session?.user.id;
+    
+            const response = await fetch(`/api/placelist/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(form)
+            });
+    
+            await response.json();
+    
+            // 메뉴 수정
+            onModifyMenu();
+        }catch(err){
+            console.error(err)
+        }
+        
+        router.push('/main')
+
     }
 
     if (!isLoad) {
