@@ -4,6 +4,7 @@ import { faThumbsUp } from '@fortawesome/free-regular-svg-icons'
 import style from './placelist.module.css';
 import { createClient } from '@/utils/supabase/client';
 import MenuList from './menulist';
+import Link from 'next/link';
 
 // placelist 테이블 데이터 타입 정의
 interface Place {
@@ -140,6 +141,7 @@ const deleteAllLists = async (id: number) => {
         
     }
 }
+
     return (
         <div className={style.listWrap}>
             <div className={style.btnWrap}>
@@ -163,6 +165,7 @@ const deleteAllLists = async (id: number) => {
                 <div className={style.list}>
                     {placeList?.map((place) => (
                         <details key={place.id} className={style.details}>
+                            
                             <summary className={style.summary}>
                                 <div className={style.categoryImage}>
                                     {checkCategory(place.category)}
@@ -202,11 +205,14 @@ const deleteAllLists = async (id: number) => {
                                                     </button>
                                                 </div>
                                                 <p>{menu.description}</p>
-                                            </li>
+                                            </li>                                            
                                     ))}
                                 </ul>
                                 <div className={style.controlBtnWrap}>                                    
-                                    <button type='button' className={style.btn}>수정</button>
+                                    {/* <button type='button' className={style.btn} onClick={() => modifyLists(place.id)}>수정</button> */}
+                                    <Link href={`/main/modifyList/${place.id}?id=${place.id}`}>
+                                        <button type="button" className={style.btn}>수정</button>
+                                    </Link>
                                     <button type='button' className={style.btn} onClick={() => deleteAllLists(place.id)}>삭제</button>
                                 </div>
                         </details>

@@ -23,7 +23,7 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
     const [placeName, setPlaceName] = useState(''); // 가게 이름
     const [placeScore, setPlaceScore] = useState<number>(5); // 가게 점수
     const [placeAddress, setPlaceAddress] = useState(''); // 가게 주소
-    const [placeCategory, setPlaceCategory] = useState('') // 가게 카테고리
+    const [placeCategory, setPlaceCategory] = useState('음식점') // 가게 카테고리
     const categoryList = ["음식점", "카페", "숙소", "여가/테마파크", "기타"]
 
     const handlePlaceName = (e: React.ChangeEvent<HTMLInputElement>) => {

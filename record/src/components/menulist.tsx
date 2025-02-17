@@ -84,6 +84,15 @@ export default function MenuList( { placelist_id }: idNum ) {
 
             await response.json();
 
+            setMenuInfo([
+                {   
+                    placelist_id: 0,
+                    name: '', 
+                    description: '',
+                    is_good: false
+                }
+            ])
+
         }catch(err) {
             console.error(err)
         }
@@ -97,7 +106,6 @@ export default function MenuList( { placelist_id }: idNum ) {
                     <FontAwesomeIcon icon={faPlus} />
                 </button>
             </div>
-            {placelist_id}
             {
                 menuInfo.map((item, index) => (
                     <div key={index} className={style.menuWrap}>

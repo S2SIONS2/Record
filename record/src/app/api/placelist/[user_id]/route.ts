@@ -73,6 +73,33 @@ export async function POST(
 }
 
 // put
+export async function PUT(
+  req: Request,
+  context: { params: Promise<{ user_id: string }>}
+) {
+  const { user_id } = await context.params;
+  if(!user_id) {
+    return NextResponse.json({ error: 'Missing user Id'}, {status: 400});
+  }
+
+  try {
+    const { id, name, score, category } = await req.json();
+    const { data, error } = await supabase
+    .from('placelist')
+    .upsert({ id: id, name: name, score: score,  category: category, })
+    .select()
+
+    if (error ){
+      console.error('리스트 수정 중 오류 발생', error)
+    }
+
+    return NextResponse.json(data, { status: 200 });
+    
+  }catch (err) {
+    console.error('Unexpected Error:', err);
+    return NextResponse.json({ error: 'Unexpected error occurred' }, { status: 500 });
+  }
+}
 
 // delete
 export async function DELETE(
