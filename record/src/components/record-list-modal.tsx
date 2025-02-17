@@ -167,43 +167,48 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
 
     // placelist id값을 받아온 후 menu 저장 실행
     const onRecordPlaceList = async () => {
-        try {
-            const session = await supabase.auth.getSession()
-            const user_id = session.data.session?.user.id;
-
-            const list = {
-                name: placeName,
-                score: placeScore,
-                address: placeAddress,
-                category: placeCategory,
-                mapx: mapx,
-                mapy: mapy,
-                user_id: user_id,
+        if(placeName == ''){
+            alert('장소명을 적어주세요.')
+            return
+        }else{
+            try {
+                const session = await supabase.auth.getSession()
+                const user_id = session.data.session?.user.id;
+    
+                const list = {
+                    name: placeName,
+                    score: placeScore,
+                    address: placeAddress,
+                    category: placeCategory,
+                    mapx: mapx,
+                    mapy: mapy,
+                    user_id: user_id,
+                }
+    
+                // post 요청 - placelist
+                const response = await fetch(`/api/placelist/${session.data.session?.user.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(list)
+                });
+    
+                if (!response.ok) {
+                    throw new Error('가게 저장에 실패했습니다.');
+                }
+                
+                const result =await response.json();
+    
+                onRecordMenuList(result[0].id)
+    
+            }catch(err) {
+                console.error(err)
             }
-
-            // post 요청 - placelist
-            const response = await fetch(`/api/placelist/${session.data.session?.user.id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(list)
-            });
-
-            if (!response.ok) {
-                throw new Error('가게 저장에 실패했습니다.');
-            }
-            
-            const result =await response.json();
-
-            onRecordMenuList(result[0].id)
-
-        }catch(err) {
-            console.error(err)
+    
+            // 모달 닫기
+            setModalOpen(false)
         }
-
-        // 모달 닫기
-        setModalOpen(false)
     }
 
     // 모달 닫기
