@@ -18,12 +18,22 @@ export async function GET(
   try {
     const { searchParams } = new URL(req.url);
     const orderBy = searchParams.get("order") || "name";
+    const selectQuery = searchParams.get("select") || "";
 
-    const { data, error } = await supabase
-      .from('placelist')
-      .select('id, name, score, mapx, mapy, address, category')
-      .eq('user_id', user_id)
-      .order(orderBy, { ascending: false })
+    const selectedCategories = selectQuery ? selectQuery.split(",") : [];
+
+    let query = supabase
+      .from("placelist")
+      .select("id, name, score, mapx, mapy, address, category")
+      .eq("user_id", user_id)
+      .order(orderBy, { ascending: false });
+
+    // 선택한 카테고리 필터링
+    if (selectedCategories.length > 0) {
+      query = query.in("category", selectedCategories);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error('Supabase Error:', error.message);

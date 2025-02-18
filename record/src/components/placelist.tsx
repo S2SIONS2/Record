@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/client';
 import MenuList from './menulist';
 import Link from 'next/link';
 import OrderbyBtn from './orderby-btn';
+import CategoryBtn from './category-btn';
 
 // placelist 테이블 데이터 타입 정의
 interface Place {
@@ -146,19 +147,8 @@ const deleteAllLists = async (id: number) => {
     return (
         <div className={style.listWrap}>
             <OrderbyBtn />
-            <div className={style.tabWrap}>
-                <button type='button' className={style.categorysTab}>카테고리</button>
-                <button type='button' className={style.categorysTab}>All</button>
-            </div>
-
             <div className={style.listArea}>
-                <div className={style.btnWrap}>
-                    <button type='button' className={style.categorysBtn}>음식점</button>    
-                    <button type='button' className={style.categorysBtn}>카페</button>
-                    <button type='button' className={style.categorysBtn}>숙소</button>
-                    <button type='button' className={style.categorysBtn}>여가/테마파크</button>
-                    <button type='button' className={style.categorysBtn}>기타</button>
-                </div>
+                <CategoryBtn />
                 <div className={style.list}>
                     {placeList?.map((place) => (
                         <details key={place.id} className={style.details}>

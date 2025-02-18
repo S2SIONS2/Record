@@ -57,7 +57,7 @@
 }
 .listArea{
     width: 100%;
-    height: calc(100% - 74px);
+    height: calc(100% - 40px);
 
     box-sizing: border-box;
     padding: 10px;
