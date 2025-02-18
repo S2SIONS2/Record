@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUtensils, faMugSaucer, faBed, faPlaceOfWorship, faLocationDot, faStar, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faUtensils, faMugSaucer, faBed, faPlaceOfWorship, faLocationDot, faStar, faMinus, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { faThumbsUp } from '@fortawesome/free-regular-svg-icons'
 import style from './placelist.module.css';
 import { createClient } from '@/utils/supabase/client';
@@ -151,8 +151,7 @@ const deleteAllLists = async (id: number) => {
                 <CategoryBtn />
                 <div className={style.list}>
                     {placeList?.map((place) => (
-                        <details key={place.id} className={style.details}>
-                            
+                        <details key={place.id} className={style.details}> 
                             <summary className={style.summary}>
                                 <div className={style.categoryImage}>
                                     {checkCategory(place.category)}
@@ -161,14 +160,19 @@ const deleteAllLists = async (id: number) => {
                                     <p className={style.placeName}>{place.name}</p>
                                     {setStars(place.score)}
                                 </div>
+                                <div className={style.downBtn}>
+                                    <FontAwesomeIcon icon={faCaretDown} />
+                                </div>
                             </summary>
-                                {/* <p>{place.address}</p> */}
 
-                                <ul className={style.menuWrap}>
-                                    <details className={style.menuModal}>
-                                        <summary>메뉴 추가</summary>
-                                        <MenuList placelist_id = {place.id} />
-                                    </details>                                    
+                            <div className={style.controlBtnWrap}>                                    
+                                {/* <button type='button' className={style.btn} onClick={() => modifyLists(place.id)}>수정</button> */}
+                                <Link href={`/main/modifyList/${place.id}?id=${place.id}`}>
+                                    <button type="button" className={style.btn}>수정</button>
+                                </Link>
+                                <button type='button' className={style.btn} onClick={() => deleteAllLists(place.id)}>삭제</button>
+                            </div>
+                                <ul className={style.menuWrap}>                                 
 
                                     {/* place.id와 placelist_id가 일치하는 메뉴만 필터링하여 출력 */}
                                     {menuList
@@ -191,17 +195,15 @@ const deleteAllLists = async (id: number) => {
                                                         <FontAwesomeIcon icon={faMinus} />
                                                     </button>
                                                 </div>
-                                                <p>{menu.description}</p>
+                                                <p className={style.menuContent}>{menu.description}</p>
                                             </li>                                            
                                     ))}
+
+                                    <details className={style.menuModal}>
+                                        <summary className={style.menu_summary}>메뉴 추가</summary>
+                                        <MenuList placelist_id = {place.id} />
+                                    </details>   
                                 </ul>
-                                <div className={style.controlBtnWrap}>                                    
-                                    {/* <button type='button' className={style.btn} onClick={() => modifyLists(place.id)}>수정</button> */}
-                                    <Link href={`/main/modifyList/${place.id}?id=${place.id}`}>
-                                        <button type="button" className={style.btn}>수정</button>
-                                    </Link>
-                                    <button type='button' className={style.btn} onClick={() => deleteAllLists(place.id)}>삭제</button>
-                                </div>
                         </details>
                     ))}
                 </div>

@@ -155,7 +155,7 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
             });
 
             if (!response.ok) {
-                throw new Error('가게 저장에 실패했습니다.');
+                throw new Error('장소 저장에 실패했습니다.');
             }
 
             await response.json();
@@ -195,7 +195,7 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
                 });
     
                 if (!response.ok) {
-                    throw new Error('가게 저장에 실패했습니다.');
+                    throw new Error('장소 저장에 실패했습니다.');
                 }
                 
                 const result =await response.json();
@@ -225,7 +225,7 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
 
     return (
         <div className={style.recordModal}>
-            <h4 className={style.modalTitle}>리스트 추가</h4>
+            <h4 className={style.modalTitle}>장소 추가</h4>
             <div className={style.flex}>
                 <input 
                     type="text" 
@@ -237,10 +237,10 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
                 />
                 <button onClick={onSubmit}>검색</button>
             </div>
-            <p className={style.notice}>* 원하는 가게가 검색되지 않나요? 띄어쓰기 포함 제목을 정확하게 입력해주세요.</p>
+            <p className={style.notice}>* 원하는 장소가 검색되지 않나요? 띄어쓰기 포함 제목을 정확하게 입력해주세요.</p>
             <div className={style.inputWrap}>
                 <div>
-                    <p>가게 명 & 별점</p>
+                    <p>장소 명 & 별점</p>
                     <div className={style.flex}>
                         <input type="text" value={placeName} onChange={handlePlaceName} required/>
                         <select value={placeScore} onChange={handlePlaceScore} required>
@@ -270,8 +270,8 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
                 </div>
                 <div>
                     <div className={style.flexBetween}>
-                        메뉴
-                        <button type="button" onClick={addMenu}> 메뉴 추가 </button>
+                        메뉴 or 디테일
+                        <button type="button" onClick={addMenu}> 추가 </button>
                     </div>
                     {
                         menuInfo.map((item, index) => (

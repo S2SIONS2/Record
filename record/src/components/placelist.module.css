@@ -58,6 +58,7 @@
 .listArea{
     width: 100%;
     height: calc(100% - 40px);
+    overflow: hidden;
 
     box-sizing: border-box;
     padding: 10px;
@@ -147,11 +148,19 @@
     color: #757575;
 }
 .categorySummary{
-    width: calc(100% - 50px);
+    width: calc(100% - 65px);
     height: 100%;
 
     box-sizing: border-box;
     padding: 10px;
+}
+.downBtn{
+    width: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #ccc;
 }
 .placeName{
     white-space: nowrap;
@@ -166,26 +175,36 @@
     color: #ffe59e;
 }
 .menuWrap{
-
-    background-color: #e1b7ff;
+    background-color: #fff;
 }
 .menuList{
-    margin-bottom: 0.5rem;
-
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #a1a1a1;
+    padding: 0.5rem 0;
+    cursor: default;
+}
+.menuList:first-child{
+    border-top: 1px solid #a1a1a1;
+}
+.menuList .btn{
+    border-width: 1px !important;
 }
 .menuTitle{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 10px;
+    padding: 0 5px;
     box-sizing: border-box;
+
+    font-weight: bold;
 
     gap:10px;
     margin-bottom: 0.5rem;
 
     font-size: 1.1rem;
 
+}
+.menuContent{
+    padding: 5px;
 }
 /* checkbox custom css */
 .menuTitle label{
@@ -211,10 +230,14 @@
 .controlBtnWrap{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 8px;
 
-    margin: 1rem 0;
+    margin-bottom:0.5rem;
+    cursor: default;
+}
+.controlBtnWrap .btn{
+    border-width: 1px !important;
 }
 
 .btn{
@@ -222,6 +245,24 @@
     border: 2px solid #000;
     padding: 3px;
     border-radius: 5px;
+}
+
+/* 메뉴 추가 디테일 */
+.menuModal{
+    margin-bottom: 1rem;
+}
+.menu_summary{
+    list-style-type: none;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 5px 0;
+    margin: 1rem 0;
+    opacity: 0.5;
+}
+.menu_summary:hover {
+    opacity: 1;
 }
 
 /* Safari 브라우저용 사용자 정의 스타일 */
