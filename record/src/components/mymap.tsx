@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import style from './mymap.module.css';
 
 // 현재 위치 타입 정의
 interface Location {
@@ -116,12 +117,17 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
 
                 const marker = new naver.maps.Marker({
                     position: new naver.maps.LatLng(Number(item.y), Number(item.x)),
-                    map: mapInstance
+                    map: mapInstance,
                 });
 
                 // 마커 클릭 시 정보창 표시
                 const infoWindow = new naver.maps.InfoWindow({
-                    content: `<div style="padding:5px;">${place.name}</div>`
+                    content: (
+                        `<div style="padding:5px; cursor:pointer;">
+                            <p> ${place.name} [${place.score}점]  </p>
+                        </div>
+                        `
+                    )
                 });
 
                 naver.maps.Event.addListener(marker, "click", function () {
@@ -152,7 +158,7 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
                 onReady={() => setIsLoaded(true)}
             />
 
-            <div id="map" style={{ width: '100%', height: 'calc(100vh - 52px)' }}></div>
+            <div id="map" className={style.map} style={{ width: '100%', height: 'calc(100vh - 52px)' }}></div>
         </>
     );
 }
