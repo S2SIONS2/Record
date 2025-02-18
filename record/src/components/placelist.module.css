@@ -247,24 +247,6 @@
     border-radius: 5px;
 }
 
-/* 메뉴 추가 디테일 */
-.menuModal{
-    margin-bottom: 1rem;
-}
-.menu_summary{
-    list-style-type: none;
-    width: 100%;
-    text-align: center;
-    border: 1px solid #000;
-    border-radius: 5px;
-    padding: 5px 0;
-    margin: 1rem 0;
-    opacity: 0.5;
-}
-.menu_summary:hover {
-    opacity: 1;
-}
-
 /* Safari 브라우저용 사용자 정의 스타일 */
 .summary::-webkit-details-marker { 
     display: none;

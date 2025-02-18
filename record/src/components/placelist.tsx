@@ -198,11 +198,8 @@ const deleteAllLists = async (id: number) => {
                                                 <p className={style.menuContent}>{menu.description}</p>
                                             </li>                                            
                                     ))}
-
-                                    <details className={style.menuModal}>
-                                        <summary className={style.menu_summary}>메뉴 추가</summary>
-                                        <MenuList placelist_id = {place.id} />
-                                    </details>   
+                                    
+                                    <MenuList placelist_id = {place.id} />
                                 </ul>
                         </details>
                     ))}

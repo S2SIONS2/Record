@@ -1,6 +1,34 @@
+/* 메뉴 추가 디테일 */
 .menuModal{
-    padding: 10px;
     box-sizing: border-box;
+    margin-bottom: 1rem;
+}
+.menu_summary{
+    list-style-type: none;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 5px 0;
+    margin: 1rem 0;
+    opacity: 0.5;
+}
+.menu_summary:hover {
+    opacity: 1;
+}
+.flexBetween{
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+.menuWrap{
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: default;
 }
 .menuSet{
     display: flex;
@@ -71,4 +99,10 @@
 .submitBtn{
     background-color: #0089bf !important;
     color: #fff;
+}
+.btn{
+    background-color: transparent;
+    border: 1px solid #000;
+    padding: 3px;
+    border-radius: 5px;
 }

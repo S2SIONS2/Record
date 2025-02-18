@@ -148,11 +148,11 @@ export default function Page() {
     }
 
     return (
-        <div>
+        <div className={style.container}>
             {place && (
                 <div className={style.inputWrap}>
-                    <div>
-                        <p>가게 명 & 별점</p>
+                    <div className={style.boxWrap}>
+                        <p className={style.title}>가게 명 & 별점</p>
                         <div className={style.flex}>
                             <input
                                 type="text"
@@ -170,8 +170,8 @@ export default function Page() {
                             </select>
                         </div>
                     </div>
-                    <div>
-                        <p>가게 분류</p>
+                    <div className={style.boxWrap}>
+                        <p className={style.title}>가게 분류</p>
                         <select name="category" value={form.category} onChange={handleChange}>
                             {categoryList.map((item) => (
                                 <option value={item} key={item}>
@@ -180,8 +180,8 @@ export default function Page() {
                             ))}
                         </select>
                     </div>
-                    <div>
-                        <p>주소</p>
+                    <div className={style.boxWrap}>
+                        <p className={style.title}>주소</p>
                         <input
                             type="text"
                             name="address"
@@ -189,7 +189,7 @@ export default function Page() {
                             onChange={handleChange}
                         />
                     </div>
-                    <div>
+                    <div className={style.boxWrap}>
                         <div className={style.flexBetween}>메뉴</div>
                         {menuList.map((menu, index) => (
                             <div key={menu.id} className={style.menuWrap}>

@@ -11,8 +11,10 @@ interface idNum {
     placelist_id : number
 }
 
-
 export default function MenuList( { placelist_id }: idNum ) {
+    // details open control
+    const [isOpen, setIsOpen] = useState(false);
+
     // db에 저장 할 메뉴 리스트 정보
     const [menuInfo, setMenuInfo] = useState([{
         placelist_id: 0, 
@@ -99,10 +101,12 @@ export default function MenuList( { placelist_id }: idNum ) {
     }
 
     return (
-        <div className={style.menuModal}>
+        <details className={style.menuModal} open={isOpen} onToggle={(e) => setIsOpen(e.currentTarget.open)}>
+            <summary className={style.menu_summary}>메뉴 추가</summary>
+
             <div className={style.flexBetween}>
-                메뉴
-                <button type="button" onClick={addMenu}>
+                메뉴 or 디테일 추가
+                <button type="button" onClick={addMenu} className={style.btn}>
                     <FontAwesomeIcon icon={faPlus} />
                 </button>
             </div>
@@ -114,7 +118,7 @@ export default function MenuList( { placelist_id }: idNum ) {
                             <label>
                                 <input type="checkbox" checked={item.is_good} onChange={(e) => handleMenuGood(e, index)}/>
                             </label>
-                            <button type="button" onClick={() => deleteMenu(index)}> X </button>
+                            <button type="button" onClick={() => deleteMenu(index)} className={style.btn}> X </button>
                         </div>
                         <textarea value={item.description} onChange={(e) => handleDescription(e, index)} className={style.textArea}></textarea>
                     </div>
@@ -123,8 +127,8 @@ export default function MenuList( { placelist_id }: idNum ) {
             
             <div className={style.btn_wrap}>
                 <button type="submit" onClick={() => onRecordMenuList(placelist_id)} className={style.submitBtn}>저장</button>
-                <button type="submit" className={style.closeBtn}>닫기</button>
+                <button type='button' onClick={() => setIsOpen(false)}>닫기</button>
             </div>
-        </div>
+        </details>   
     )
 }
