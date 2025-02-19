@@ -7,6 +7,7 @@ import MenuList from './menulist';
 import Link from 'next/link';
 import OrderbyBtn from './orderby-btn';
 import CategoryBtn from './category-btn';
+import useSearchStore from '@/store/useSearchStore';
 
 // placelist 테이블 데이터 타입 정의
 interface Place {
@@ -14,8 +15,11 @@ interface Place {
     latitude?: number;
     longitude?: number;
     address: string;
+    roadaddress: string;
+    mapx?: number;
+    mapy?: number;
     name: string;
-    score: number
+    score: number;
     category: string;
 }
 
@@ -144,6 +148,17 @@ const deleteAllLists = async (id: number) => {
     }
 }
 
+// 리스트 클릭 시 해당 리스트의 주소 전달
+const { setSelectedPlace } = useSearchStore();
+const handleClickPlace = (value: Place) => {
+    const placeWithDefaults = {
+        ...value,
+        mapx: value.mapx ?? 0,
+        mapy: value.mapy ?? 0,
+    };
+    setSelectedPlace(placeWithDefaults);
+}
+
     return (
         <div className={style.listWrap}>
             <OrderbyBtn />
@@ -165,12 +180,14 @@ const deleteAllLists = async (id: number) => {
                                 </div>
                             </summary>
 
-                            <div className={style.controlBtnWrap}>                                    
-                                {/* <button type='button' className={style.btn} onClick={() => modifyLists(place.id)}>수정</button> */}
-                                <Link href={`/main/modifyList/${place.id}?id=${place.id}`}>
-                                    <button type="button" className={style.btn}>수정</button>
-                                </Link>
-                                <button type='button' className={style.btn} onClick={() => deleteAllLists(place.id)}>삭제</button>
+                            <div className={style.controlBtnWrap}>   
+                                <button type='button' onClick={() => handleClickPlace(place)} className={style.btn}>위치 보기</button>                             
+                                <div className={style.controlBtnWrap}>
+                                    <Link href={`/main/modifyList/${place.id}?id=${place.id}`}>
+                                        <button type="button" className={style.btn}>수정</button>
+                                    </Link>
+                                    <button type='button' className={style.btn} onClick={() => deleteAllLists(place.id)}>삭제</button>
+                                </div>
                             </div>
                                 <ul className={style.menuWrap}>                                 
 

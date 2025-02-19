@@ -4,6 +4,7 @@ interface Place {
   name: string;
   score: number;
   roadaddress: string;
+  address?: string;
   mapx: number;
   mapy: number;
 }

@@ -43,7 +43,7 @@ export default function MainNav() {
             <Link href={'/main'} className={style.logo}>Record</Link>
             <div className={style.navDiv}>
                 <p>환영합니다. {user}님</p>
-                <Link href={'/main/mypage'}>마이페이지</Link>
+                {/* <Link href={'/main/mypage'}>마이페이지</Link> */}
                 <button onClick={logout} className={style.logoutBtn}>로그아웃</button>
             </div>
         </nav>

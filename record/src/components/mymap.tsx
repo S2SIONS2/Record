@@ -4,6 +4,9 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 import style from './mymap.module.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLocationArrow } from '@fortawesome/free-solid-svg-icons'
+
 // 현재 위치 타입 정의
 interface Location {
     lat: number;
@@ -27,7 +30,7 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [map, setMap] = useState<naver.maps.Map | null>(null);
 
-    // 현재 위치 상태
+    // 현재 위치가 없을 때 기본 위치 및 현재 위치 상태 
     const [currentLocation, setCurrentLocation] = useState<Location>({ lat: 37.5665, lng: 126.978 });
 
     // 검색한 위치의 위도, 경도 가져오기
@@ -68,10 +71,23 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
         }
     };
 
+    // 현재 위치 보는 버튼
+    const handleMyLocation = () => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            setCurrentLocation({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            });
+
+            updateMapCenter(position.coords.latitude, position.coords.longitude);
+        });
+    };
+
     // 지도 중심 업데이트
     const updateMapCenter = (lat: number, lng: number) => {
         if (map) {
             map.setCenter(new naver.maps.LatLng(lat, lng));
+            map.setOptions({ zoom: 16 });
         }
     };
 
@@ -158,7 +174,11 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
                 onReady={() => setIsLoaded(true)}
             />
 
-            <div id="map" className={style.map} style={{ width: '100%', height: 'calc(100vh - 52px)' }}></div>
+            <div id="map" className={style.map} style={{ width: '100%', height: 'calc(100vh - 52px)' }}>
+                <button type="button" onClick={handleMyLocation} className={style.myLocationBtn}>
+                    <FontAwesomeIcon icon={faLocationArrow} />
+                </button>
+            </div>
         </>
     );
 }
