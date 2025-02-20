@@ -46,7 +46,6 @@ export default function Page() {
     
     // 카카오톡 회원가입 및 로그인
     const kakaoLogin = async () => {
-        console.log(process.env.NEXT_PUBLIC_SUPABASE_URL);
         try {          
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'kakao',

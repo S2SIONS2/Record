@@ -22,9 +22,6 @@ export async function GET(req: Request) {
         cache: "no-store",
     });
 
-    console.log(process.env.NEXT_PUBLIC_NAVER_SEARCH_CLIENT_ID);
-    console.log(process.env.NAVER_SEARCH_CLIENT_SECRET)
-
     if (!response.ok) {
         return NextResponse.json({ error: "Failed to fetch data" }, { status: response.status });
     }

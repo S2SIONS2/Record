@@ -99,11 +99,9 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
             if (!response.ok) {
               throw new Error('네트워크 응답이 올바르지 않습니다.');
             }
-            console.log(response)
             return response.json();
           })
           .then(data => {
-            console.log(data)
             // 데이터 추가
             setPlaceAddress(data.items[0].address)
             // 정규식 활용
@@ -122,8 +120,6 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
           .catch(error => {
             console.error('API 호출 중 오류가 발생했습니다: ', error);
           });
-
-          console.log(response)
 
           return response
     }
