@@ -16,7 +16,8 @@ export async function GET(req: Request) {
         method: "GET",
         headers: {
             "X-Naver-Client-Id": process.env.NEXT_PUBLIC_NAVER_SEARCH_CLIENT_ID || "",
-            "X-Naver-Client-Secret": process.env.NEXT_PUBLIC_NAVER_SEARCH_CLIENT_SECRET || "",
+            "X-Naver-Client-Secret": process.env.NAVER_SEARCH_CLIENT_SECRET || "",
+            "Content-Type": "application/json",
         },
         cache: "no-store",
     });
