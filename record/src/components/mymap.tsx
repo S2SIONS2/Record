@@ -173,8 +173,10 @@ export default function MyMap({ selectedPlace, placeList }: MyMapProps) {
                 src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&submodules=geocoder`}
                 onReady={() => setIsLoaded(true)}
             />
+            <div className={style.map} style={{ width: '100%', height: 'calc(100vh - 52px)' }}>
+                <div id="map" style={{ width: '100%', height: '100%' }}>
 
-            <div id="map" className={style.map} style={{ width: '100%', height: 'calc(100vh - 52px)' }}>
+                </div>
                 <button type="button" onClick={handleMyLocation} className={style.myLocationBtn}>
                     <FontAwesomeIcon icon={faLocationArrow} />
                 </button>
