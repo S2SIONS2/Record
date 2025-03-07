@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import style from './menulist.module.css';
 import { createClient } from '@/utils/supabase/client';
 
@@ -60,9 +60,21 @@ export default function MenuList( { placelist_id }: idNum ) {
         setMenuInfo(newMenuList)
     }
 
+    // 버튼 중복 클릭 방지
+    const isProcessing = useRef(false)
+
     // placelist, menu 저장
     const supabase = createClient()
     const onRecordMenuList = async (placelist_id: number) => {
+        if (isProcessing.current) return;
+
+        if (!menuInfo[0].name) {
+            alert('메뉴 명을 적어주세요.')
+            return;
+        }
+        
+        isProcessing.current = true;
+
         try {
             const session = await supabase.auth.getSession()
             const user_id = session.data.session?.user.id;
@@ -97,6 +109,8 @@ export default function MenuList( { placelist_id }: idNum ) {
 
         }catch(err) {
             console.error(err)
+        } finally {
+            isProcessing.current = false;
         }
     }
 
@@ -110,6 +124,7 @@ export default function MenuList( { placelist_id }: idNum ) {
                     <FontAwesomeIcon icon={faPlus} />
                 </button>
             </div>
+            {/* {isLoading ? 'true' : 'false'} */}
             {
                 menuInfo.map((item, index) => (
                     <div key={index} className={style.menuWrap}>

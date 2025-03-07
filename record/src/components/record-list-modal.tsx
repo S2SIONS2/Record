@@ -1,7 +1,7 @@
 'use client'
 
 import { createClient } from "@/utils/supabase/client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import useSearchStore from "@/store/useSearchStore";
 import style from "./record-list-modal.module.css";
 
@@ -134,9 +134,14 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
 
     const supabase = createClient();
 
+    // 중복 저장 방지
+    const isProcessing = useRef(false)
+
     // placelist, menu 저장
     const onRecordMenuList = async (placelist_id: number) => {
         try {
+            if (isProcessing.current) return;
+
             const session = await supabase.auth.getSession()
             const user_id = session.data.session?.user.id;
             
@@ -204,10 +209,12 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
     
             }catch(err) {
                 console.error(err)
+            }finally {
+                isProcessing.current = false;
+                // 모달 닫기
+                setModalOpen(false)
             }
     
-            // 모달 닫기
-            setModalOpen(false)
         }
     }
 

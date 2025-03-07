@@ -20,7 +20,7 @@ interface Place {
     mapx: number;
     mapy: number;
 }
-
+ 
 interface MyMapProps {
     selectedPlace: Place | null;
     placeList: Place[] | null;
