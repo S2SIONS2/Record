@@ -1,7 +1,7 @@
 'use client'
 
 import { createClient } from "@/utils/supabase/client";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import useSearchStore from "@/store/useSearchStore";
 import style from "./record-list-modal.module.css";
 
@@ -135,13 +135,11 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
     const supabase = createClient();
 
     // 중복 저장 방지
-    const isProcessing = useRef(false)
+    const [isProcessing, setIsProcessing] = useState(false)
 
     // placelist, menu 저장
     const onRecordMenuList = async (placelist_id: number) => {
         try {
-            if (isProcessing.current) return;
-
             const session = await supabase.auth.getSession()
             const user_id = session.data.session?.user.id;
             
@@ -177,6 +175,10 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
             return
         }else{
             try {
+                if (isProcessing) return;
+
+                setIsProcessing(true);
+                
                 const session = await supabase.auth.getSession()
                 const user_id = session.data.session?.user.id;
     
@@ -210,7 +212,7 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
             }catch(err) {
                 console.error(err)
             }finally {
-                isProcessing.current = false;
+                setIsProcessing(false)
                 // 모달 닫기
                 setModalOpen(false)
             }
@@ -296,7 +298,7 @@ export default function RecordListModal({ setModalOpen }: SetModalOpen) {
                     }
                 </div>
                 <div className={style.btn_wrap}>
-                    <button type="submit" onClick={onRecordPlaceList} className={style.submitBtn}>저장</button>
+                    <button type="submit" onClick={onRecordPlaceList} className={style.submitBtn} disabled={isProcessing}>저장</button>
                     <button type="submit" onClick={onClose} className={style.closeBtn}>닫기</button>
                 </div>
             </div>
